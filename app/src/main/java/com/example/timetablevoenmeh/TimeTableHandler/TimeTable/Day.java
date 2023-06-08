@@ -1,0 +1,74 @@
+package com.example.timetablevoenmeh.TimeTableHandler.TimeTable;
+
+import java.io.FileOutputStream;
+import java.util.ArrayList;
+import java.util.List;
+
+public class Day {
+    private String name;
+    private List<Lesson> lessons;
+    private final static String FILE_NAME = "content.txt";
+    public Day(String day){
+        FileOutputStream fos = null;
+        day.replaceAll("\\t","\\n");
+        day=day.replaceAll("\"[^>]*\">", "");
+        day=day.replaceAll("(?m)^[ \t]*\r?\n","");
+        String text="";
+        for (String str:
+             List.of(day.split("\n"))) {
+            text+=str.trim()+"\n";
+        }
+        lessons=new ArrayList<>();
+        List<String> lines = List.of(text.split("\n"));
+        this.name=lines.get(0);
+        String lesson="";
+        for (int i = 0;i<lines.size();i++) {
+            if(lines.get(i).contains(this.name)) {
+                Lesson parsedLesson;
+                try {
+                    parsedLesson = Lesson.getLesson(lesson);
+                }catch (RuntimeException e)
+                {
+                    parsedLesson=null;
+                }
+                if(parsedLesson!=null)
+                    lessons.add(parsedLesson);
+                lesson="";
+            }else
+            {
+                lesson+=lines.get(i)+"\n";
+            }
+        }
+        Lesson parsedLesson = Lesson.getLesson(lesson);
+        if(parsedLesson!=null)
+            lessons.add(parsedLesson);
+    }
+    public String printDay(boolean isEven)
+    {
+        String result="";
+        for (Lesson lesson:
+             lessons) {
+            if(lesson.isEven()==isEven) {
+                result+= lesson+"\n";
+            }
+        }
+        return result;
+    }
+
+    public List<Lesson> getLessons(boolean isEven)
+    {
+        List<Lesson> result=new ArrayList<>();
+        for (Lesson lesson:
+                lessons) {
+            if(lesson.isEven()==isEven) {
+                result.add(lesson);
+            }
+        }
+        return result;
+    }
+
+    public String getName()
+    {
+        return name;
+    }
+}
