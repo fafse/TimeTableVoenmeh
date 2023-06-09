@@ -18,9 +18,8 @@ public class Lesson {
         time=List.of(lines.get(1).split(" ")).get(0);
         lessonName=lines.get(2);
         if (!text.contains("пр ЭК ПО ФК И СПОРТУ")) {
-            if (lines.size() > 3) {
-                teacherId = Integer.parseInt(lines.get(3));
-                if (lines.size() > 3) {
+
+                if (lines.size() > 4) {
                     teacherName = lines.get(4);
                     if (lines.size() > 5) {
                         office = lines.get(5);
@@ -32,11 +31,7 @@ public class Lesson {
                 {
                     teacherName = "-";
                 }
-            }
-            else
-            {
-                teacherId = -1;
-            }
+
 
 
         }

@@ -1,6 +1,8 @@
 package com.example.timetablevoenmeh.TimeTableHandler.TimeTable;
 
 
+import org.xmlpull.v1.XmlPullParser;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -13,14 +15,15 @@ import javax.net.ssl.HttpsURLConnection;
 
 public class HTTPDownloader {
     private String defaultUrl = "https://www.voenmeh.ru/templates/jd_atlanta/js/TimetableGroup33.xml";
-    private List<Group> groups;
+    private Group myGroup;
+
+    private String groupName="О719Б";
 
     public void Download() throws IOException {
         StringBuilder xmlResult = new StringBuilder();
         BufferedReader reader = null;
         InputStream stream = null;
         HttpsURLConnection connection = null;
-
 
         try {
             URL url = new URL(defaultUrl);
@@ -33,13 +36,18 @@ public class HTTPDownloader {
                 xmlResult.append(line + "\n");
             }
             String body = xmlResult.toString();
-            groups = new ArrayList<>();
             body=body.substring(body.indexOf("<Group Number=\"")+15,body.length());
+            Group updatedGroup=null;
             for (String group :
                     List.of(body.split("<Group Number=\""))) {
-                groups.add(new Group(group));
-            }
+                if(group.contains(groupName))
+                    updatedGroup= new Group(group);
 
+            }
+            if(updatedGroup!=null)
+            {
+                myGroup=updatedGroup;
+            }
 
         } finally {
             if (reader != null) {
@@ -57,11 +65,12 @@ public class HTTPDownloader {
     }
 
     public Group getCurrentGroup(String groupName) {
-        for (Group resultGrop:
-             groups) {
-            if(resultGrop.getName().equals(groupName))
-                return resultGrop;
-        }
-        return null;
+        Group currentGroup=myGroup;
+        return currentGroup;
+    }
+
+    public void setGroupName(String groupName)
+    {
+        this.groupName=groupName;
     }
 }
