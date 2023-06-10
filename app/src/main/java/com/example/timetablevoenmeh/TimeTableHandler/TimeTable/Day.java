@@ -1,10 +1,11 @@
 package com.example.timetablevoenmeh.TimeTableHandler.TimeTable;
 
 import java.io.FileOutputStream;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Day {
+public class Day implements Serializable {
     private String name;
     private List<Lesson> lessons;
     private final static String FILE_NAME = "content.txt";

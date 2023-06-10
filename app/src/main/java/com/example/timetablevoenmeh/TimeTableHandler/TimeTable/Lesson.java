@@ -1,8 +1,9 @@
 package com.example.timetablevoenmeh.TimeTableHandler.TimeTable;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class Lesson {
+public class Lesson  implements Serializable {
     private String time;
     private boolean isEven;
     private String lessonName;

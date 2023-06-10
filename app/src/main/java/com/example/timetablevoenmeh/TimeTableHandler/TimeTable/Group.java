@@ -1,10 +1,12 @@
 package com.example.timetablevoenmeh.TimeTableHandler.TimeTable;
 
 
+import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
-public class Group {
+public class Group implements Serializable {
     private String name;
     private String id;
     private List<Day> days;
@@ -33,14 +35,18 @@ public class Group {
         days.remove(0);
     }
 
-    public List<Lesson> getTimeTable(String day, Boolean isEven)
+    public ArrayList<String> getTimeTable(String day, Boolean isEven)
     {
-        List<Lesson> result= new ArrayList<>();
+        ArrayList<String> result= new ArrayList<>();
         for (int i = 0;i< days.size();i++)
         {
             if(days.get(i).getName().toLowerCase().equals(day.toLowerCase()))
             {
-                result.addAll(days.get(i).getLessons(isEven));
+                for(Lesson lesson: days.get(i).getLessons(isEven))
+                {
+                    result.add(lesson.toString());
+                }
+                break;
             }
         }
         return result;

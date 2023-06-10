@@ -9,6 +9,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 import javax.net.ssl.HttpsURLConnection;
@@ -18,8 +19,10 @@ public class HTTPDownloader {
     private Group myGroup;
 
     private String groupName="О719Б";
+    private String groups;
 
     public void Download() throws IOException {
+        groups= "";
         StringBuilder xmlResult = new StringBuilder();
         BufferedReader reader = null;
         InputStream stream = null;
@@ -40,6 +43,8 @@ public class HTTPDownloader {
             Group updatedGroup=null;
             for (String group :
                     List.of(body.split("<Group Number=\""))) {
+                groups+=group.substring(0,group.indexOf("\""));
+                groups+="\n";
                 if(group.contains(groupName))
                     updatedGroup= new Group(group);
 
@@ -64,13 +69,18 @@ public class HTTPDownloader {
 
     }
 
-    public Group getCurrentGroup(String groupName) {
+    public String getGroups()
+    {
+        return groups;
+    }
+
+    public Group getCurrentGroup() {
         Group currentGroup=myGroup;
         return currentGroup;
     }
 
-    public void setGroupName(String groupName)
+    public void setGroupName(String newGroupName)
     {
-        this.groupName=groupName;
+        this.groupName=newGroupName;
     }
 }

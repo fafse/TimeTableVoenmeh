@@ -4,38 +4,59 @@ import android.util.Log;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
 public class DateFormatter {
-    public boolean isThisWeekEven(Date day)
-    {
-
-        long delay = System.currentTimeMillis() - day.getTime(); //получим разницу (в мс) между сегодня и 1-ым сентября
-        long week = 1000 * 60 * 60 * 24 * 7; //кол-во миллисекунд в одной неделе
-        delay %= week * 2; //найдем остаток от деления разницы на две недели
-
-        if(delay<= week)
-        {
+    private Calendar date;
+    public boolean isThisWeekEven(Calendar day) {
+        if (day.getWeekYear() % 2 == 1)
             return true;
-        }else
-        {
+        else
             return false;
+    }
+
+    public void update() {
+        date=Calendar.getInstance();
+
+    }
+    public Calendar getCurrentDate()
+    {
+        Calendar currentDate = date;
+        date.setFirstDayOfWeek(Calendar.MONDAY);
+        return currentDate;
+    }
+
+    public String getDayOfWeek() {
+        String result="";
+        switch (date.get(Calendar.DAY_OF_WEEK)) {
+            case 2:
+                result = "Понедельник";
+                break;
+            case 3:
+                result = "Вторник";
+                break;
+            case 4:
+                result = "Среда";
+                break;
+            case 5:
+                result = "Четверг";
+                break;
+            case 6:
+                result = "Пятница";
+                break;
+            case 7:
+                result = "Суббота";
+                break;
+            case 1:
+                result = "Воскресенье";
+                break;
         }
+        return result;
     }
 
-    public Date getCurrentDate()
-    {
-        Date tmp = new Date();
-        Log.d("DATETMP", "getCurrentDate: "+tmp);
-        return tmp;
+    public void addDays(int numOfDays) {
+        date.add(Calendar.DATE,numOfDays);
     }
-    public String getDayOfWeek(Date dateFormat)
-    {
-        Log.d("dateFormat", "getDayOfWeek: "+dateFormat);
-        String newFormat = new SimpleDateFormat("EEEE",new Locale("ru")).format(dateFormat);
-        Log.d("RESULT", "getDayOfWeek: "+newFormat);
-        return newFormat;
-    }
-
 }
