@@ -52,6 +52,10 @@ public class TimeTableHandler implements Serializable {
         downloader.setGroupName(groupName);
         downloader.Download();
         groupSaver.saveText(downloader.getGroups());
+        if(groupListNames==null)
+        {
+            groupListNames=groupSaver.openText();
+        }
         //Log.d("DOWNLOADER", "groups: "+groupSaver.openText());
         myGroup = downloader.getCurrentGroup();
         groupName = myGroup.getName();
@@ -69,6 +73,13 @@ public class TimeTableHandler implements Serializable {
         if (newGroupName.length() < 4) return false;
         newGroupName = newGroupName.toUpperCase();
         Log.d("TIMETABLEHANDLER", "setGroupName: " + groupName);
+        if(groupListNames==null) {
+            try {
+                update();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
         if (groupListNames.contains(newGroupName) && newGroupName != "") {
             groupName = newGroupName;
             try {
