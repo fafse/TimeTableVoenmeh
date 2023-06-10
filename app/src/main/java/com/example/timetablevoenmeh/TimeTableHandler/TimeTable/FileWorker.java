@@ -21,11 +21,17 @@ public class FileWorker {
     {
         this.fileName=fileName;
         path =new File(Environment.getExternalStorageDirectory(),fileName);
+        if(!path.exists())
         try {
             path.createNewFile();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public boolean isExists()
+    {
+        return path.exists();
     }
     // сохранение файла
     public void saveText(String text){

@@ -26,49 +26,50 @@ public class TimeTableHandler implements Serializable {
     public TimeTableHandler(String groupName) {
         groupSaver = new FileWorker("Groups.txt");
         myGroupSaver = new FileWorker("CurrentGroup.ser");
-        myGroup=myGroupSaver.readGroup();
-        groupListNames=groupSaver.openText();
-        if(myGroup==null)
-        {
-            groupName="О719Б";
+        myGroup=null;
+        groupListNames=null;
+        if (!myGroupSaver.isExists())
+            myGroup = myGroupSaver.readGroup();
+        if (!groupSaver.isExists())
+            groupListNames = groupSaver.openText();
+        if (myGroup == null) {
+            this.groupName = "О719Б";
             try {
                 update();
             } catch (IOException e) {
-                Log.d("TIMETABLEHANDLER", "Update: "+new RuntimeException(e));
+                Log.d("TIMETABLEHANDLER", "Update: " + new RuntimeException(e));
             }
-        }else {
-            groupName=myGroup.getName();
-            Log.d(groupName, "savedGroup: "+myGroup.getTimeTable("Понедельник",true));
+        } else {
+            groupName = myGroup.getName();
+            Log.d(groupName, "savedGroup: " + myGroup.getTimeTable("Понедельник", true));
         }
         this.groupName = groupName;
     }
 
     private void update() throws IOException {
-        Log.d("TimeTableHandler", "Update: "+groupName);
+        Log.d("TimeTableHandler", "Update: " + groupName);
         downloader = new HTTPDownloader();
         downloader.setGroupName(groupName);
         downloader.Download();
         groupSaver.saveText(downloader.getGroups());
         //Log.d("DOWNLOADER", "groups: "+groupSaver.openText());
         myGroup = downloader.getCurrentGroup();
-        groupName=myGroup.getName();
+        groupName = myGroup.getName();
         myGroupSaver.saveGroup(myGroup);
     }
 
 
     public ArrayList<String> getTimeTable(String dayOfWeek, boolean isEven) {
-        Log.d("TIMETABLEHANDLER", "getTimeTable: "+dayOfWeek+" "+isEven);
-        return myGroup.getTimeTable(dayOfWeek,isEven);
+        Log.d("TIMETABLEHANDLER", "getTimeTable: " + dayOfWeek + " " + isEven);
+        return myGroup.getTimeTable(dayOfWeek, isEven);
     }
 
 
-
-    public boolean setGroupName(String newGroupName)
-    {
-        if(newGroupName.length()<4) return false;
-        newGroupName=newGroupName.toUpperCase();
-        Log.d("TIMETABLEHANDLER", "setGroupName: "+groupName);
-        if(groupListNames.contains(newGroupName)&&newGroupName!="") {
+    public boolean setGroupName(String newGroupName) {
+        if (newGroupName.length() < 4) return false;
+        newGroupName = newGroupName.toUpperCase();
+        Log.d("TIMETABLEHANDLER", "setGroupName: " + groupName);
+        if (groupListNames.contains(newGroupName) && newGroupName != "") {
             groupName = newGroupName;
             try {
                 update();
@@ -80,8 +81,7 @@ public class TimeTableHandler implements Serializable {
         return false;
     }
 
-    public String getGroupName()
-    {
+    public String getGroupName() {
         return groupName;
     }
 
