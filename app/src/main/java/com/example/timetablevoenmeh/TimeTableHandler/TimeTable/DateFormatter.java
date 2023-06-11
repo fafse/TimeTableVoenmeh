@@ -10,8 +10,9 @@ import java.util.Locale;
 
 public class DateFormatter {
     private Calendar date;
-    public boolean isThisWeekEven(Calendar day) {
-        if (day.getWeekYear() % 2 == 1)
+    public boolean isThisWeekEven() {
+        Log.d("DATEFORMATTER", "isThisWeekEven: "+date.get(Calendar.WEEK_OF_MONTH)%2);
+        if (date.get(Calendar.WEEK_OF_YEAR)%2 == 1)
             return true;
         else
             return false;

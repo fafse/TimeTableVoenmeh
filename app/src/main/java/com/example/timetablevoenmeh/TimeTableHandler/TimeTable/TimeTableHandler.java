@@ -28,9 +28,11 @@ public class TimeTableHandler implements Serializable {
         myGroupSaver = new FileWorker("CurrentGroup.ser");
         myGroup=null;
         groupListNames=null;
-        if (!myGroupSaver.isExists())
+        if (myGroupSaver.isExists()) {
             myGroup = myGroupSaver.readGroup();
-        if (!groupSaver.isExists())
+            Log.i("TIMETABLEHANDLER","READING MYGROUP...");
+        }
+        if (groupSaver.isExists())
             groupListNames = groupSaver.openText();
         if (myGroup == null) {
             this.groupName = "О719Б";
@@ -72,7 +74,7 @@ public class TimeTableHandler implements Serializable {
     public boolean setGroupName(String newGroupName) {
         if (newGroupName.length() < 4) return false;
         newGroupName = newGroupName.toUpperCase();
-        Log.d("TIMETABLEHANDLER", "setGroupName: " + groupName);
+        Log.d("TIMETABLEHANDLER", "setGroupName: " + newGroupName);
         if(groupListNames==null) {
             try {
                 update();

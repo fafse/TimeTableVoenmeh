@@ -20,7 +20,10 @@ public class FileWorker {
     public FileWorker(String fileName)
     {
         this.fileName=fileName;
-        path =new File(Environment.getExternalStorageDirectory(),fileName);
+        path =new File(Environment.getExternalStorageDirectory(),"TimeTableVoenmeh");
+        if(!path.exists())
+            path.mkdir();
+        path=new File(path.getAbsolutePath(),fileName);
         if(!path.exists())
         try {
             path.createNewFile();
