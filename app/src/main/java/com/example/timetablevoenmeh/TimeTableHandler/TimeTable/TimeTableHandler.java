@@ -35,7 +35,7 @@ public class TimeTableHandler implements Serializable {
         if (groupSaver.isExists())
             groupListNames = groupSaver.openText();
         if (myGroup == null) {
-            this.groupName = "О719Б";
+            this.groupName = groupName;
             try {
                 update();
             } catch (IOException e) {

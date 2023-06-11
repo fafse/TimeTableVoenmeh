@@ -29,7 +29,7 @@ import java.util.Date;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
-    TextView toolBarTextView,groupNameTextView;
+    TextView toolBarTextView,groupNameTextView,dataTextView,lessonNotFoundTextView;
     Button groupNameAcceptButton,buttonPrev,buttonNext;
     TimeTableHandler timeTableHandler;
     ArrayList<String> lessonsList;
@@ -53,6 +53,8 @@ public class MainActivity extends AppCompatActivity {
         new Thread(new Runnable() {
             public void run() {
                 dateFormatter.update();
+                dataTextView=findViewById(R.id.dateTextView);
+                lessonNotFoundTextView=findViewById(R.id.LessonNotFoundTextView);
                 buttonNext=findViewById(R.id.buttonNext);
                 buttonPrev=findViewById(R.id.buttonPrev);
                 timeTableHandler = new TimeTableHandler("О719Б");
@@ -77,8 +79,16 @@ public class MainActivity extends AppCompatActivity {
         lessonsList = timeTableHandler.getTimeTable(
                 dateFormatter.getDayOfWeek(),
                 dateFormatter.isThisWeekEven());
-        adapter = new ArrayAdapter<>(this,
-                android.R.layout.simple_list_item_1, lessonsList);
+        if(lessonsList.size()==0)
+        {
+            adapter=null;
+            lessonNotFoundTextView.setText("На выбранную дату не найдено предметов");
+        }else {
+            adapter = new ArrayAdapter<>(this,
+                    android.R.layout.simple_list_item_1, lessonsList);
+            lessonNotFoundTextView.setText("");
+        }
+        dataTextView.setText(dateFormatter.getCurrentDate());
         toolBarTextView.setText(timeTableHandler.getGroupName());
         Log.d("TAG", "run: END");
 
@@ -97,7 +107,13 @@ public class MainActivity extends AppCompatActivity {
                 new Thread(new Runnable() {
                     public void run() {
                         if(timeTableHandler.setGroupName(groupNameTextView.getText().toString())) {
-                            groupNameTextView.setText("");
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    groupNameTextView.setText("");
+                                }
+                            });
+
                             loadTable();
                             setAdapter(timeTableList, adapter);
                         }
