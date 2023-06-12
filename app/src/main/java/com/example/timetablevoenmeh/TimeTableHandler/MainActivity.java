@@ -1,154 +1,76 @@
 package com.example.timetablevoenmeh.TimeTableHandler;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.Settings;
-import android.util.Log;
-import android.view.View;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.ListView;
-import android.widget.ScrollView;
-import android.widget.TextView;
-import android.widget.Toolbar;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
+import com.example.timetablevoenmeh.HomeFragment;
 import com.example.timetablevoenmeh.R;
-import com.example.timetablevoenmeh.TimeTableHandler.TimeTable.DateFormatter;
-import com.example.timetablevoenmeh.TimeTableHandler.TimeTable.Lesson;
-import com.example.timetablevoenmeh.TimeTableHandler.TimeTable.TimeTableHandler;
-import com.google.android.gms.ads.MobileAds;
+import com.example.timetablevoenmeh.SettingsFragment;
+import com.example.timetablevoenmeh.databinding.ActivityMainBinding;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
+import java.util.Calendar;
 
 public class MainActivity extends AppCompatActivity {
-    TextView toolBarTextView,groupNameTextView,dataTextView,lessonNotFoundTextView;
-    Button groupNameAcceptButton,buttonPrev,buttonNext;
-    TimeTableHandler timeTableHandler;
-    ArrayList<String> lessonsList;
-    DateFormatter dateFormatter;
-    ListView timeTableList;
-    ArrayAdapter<String> adapter;
 
+    ConstraintLayout layout;
+    ActivityMainBinding binding;
+
+    private String groupName = "О719Б";
+    private Calendar calendar;
+
+    @SuppressLint("NonConstantResourceId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        dateFormatter = new DateFormatter();
+        calendar = Calendar.getInstance();
+        calendar.add(Calendar.DATE, 1);
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        binding = ActivityMainBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
+        String tmp = String.valueOf(calendar.get(Calendar.DATE));
+        Bundle bundle = new Bundle();
+        bundle.putString("groupName", groupName);
+        bundle.putString("calendar", tmp);
+        replaceFragment(new HomeFragment(), bundle);
+        binding.bottomNavigationView.setOnItemSelectedListener(item -> {
+            if (item.getItemId() == R.id.home) {
+                replaceFragment(new HomeFragment(), bundle);
+            } else if (item.getItemId() == R.id.settings) {
+                replaceFragment(new SettingsFragment(), bundle);
+            }
+
+            return true;
+        });
+
 // используем адаптер данных
-        if (Build.VERSION.SDK_INT >= 30){
-            if (!Environment.isExternalStorageManager()){
+        if (Build.VERSION.SDK_INT >= 30) {
+            while (!Environment.isExternalStorageManager()) {
                 Intent getpermission = new Intent();
                 getpermission.setAction(Settings.ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION);
                 startActivity(getpermission);
             }
         }
-        new Thread(new Runnable() {
-            public void run() {
-                dateFormatter.update();
-                dataTextView=findViewById(R.id.dateTextView);
-                lessonNotFoundTextView=findViewById(R.id.LessonNotFoundTextView);
-                buttonNext=findViewById(R.id.buttonNext);
-                buttonPrev=findViewById(R.id.buttonPrev);
-                timeTableHandler = new TimeTableHandler("О719Б");
-                timeTableList = findViewById(R.id.ListTimeTable);
-                toolBarTextView = findViewById(R.id.toolBarTextView);
-                loadTable();
-                setAdapter(timeTableList,adapter);
-            }
-        }).start();
-
-    }
-    private void setAdapter(final ListView list,final ArrayAdapter<String> adapter){
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                list.setAdapter(adapter);
-            }
-        });
-    }
-    private void loadTable()
-    {
-        lessonsList = timeTableHandler.getTimeTable(
-                dateFormatter.getDayOfWeek(),
-                dateFormatter.isThisWeekEven());
-        if(lessonsList.size()==0)
-        {
-            adapter=null;
-            lessonNotFoundTextView.setText("На выбранную дату не найдено предметов");
-        }else {
-            adapter = new ArrayAdapter<>(this,
-                    android.R.layout.simple_list_item_1, lessonsList);
-            lessonNotFoundTextView.setText("");
-        }
-        dataTextView.setText(dateFormatter.getCurrentDate());
-        toolBarTextView.setText(timeTableHandler.getGroupName());
-        Log.d("TAG", "run: END");
-
 
     }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-        groupNameAcceptButton=findViewById(R.id.groupNameInputButton);
-        groupNameTextView=findViewById(R.id.groupNameInput);
-        groupNameAcceptButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
 
-                new Thread(new Runnable() {
-                    public void run() {
-                        if(timeTableHandler.setGroupName(groupNameTextView.getText().toString())) {
-                            runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    groupNameTextView.setText("");
-                                }
-                            });
+    private void replaceFragment(Fragment fragment, Bundle bundle) {
+        fragment.setArguments(bundle);
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.fragmentContainerView, fragment);
+        fragmentTransaction.commit();
 
-                            loadTable();
-                            setAdapter(timeTableList, adapter);
-                        }
-                    }
-                }).start();
-
-            }
-        });
-        buttonNext.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                new Thread(new Runnable() {
-                    public void run() {
-                        dateFormatter.addDays(1);
-                            loadTable();
-                            setAdapter(timeTableList, adapter);
-                    }
-                }).start();
-
-            }
-        });
-        buttonPrev.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                new Thread(new Runnable() {
-                    public void run() {
-                        dateFormatter.addDays(-1);
-                            loadTable();
-                            setAdapter(timeTableList, adapter);
-                    }
-                }).start();
-
-            }
-        });
     }
+
+
 }

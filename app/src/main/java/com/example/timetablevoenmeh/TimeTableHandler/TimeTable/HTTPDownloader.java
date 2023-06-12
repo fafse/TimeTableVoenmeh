@@ -1,6 +1,8 @@
 package com.example.timetablevoenmeh.TimeTableHandler.TimeTable;
 
 
+import android.util.Log;
+
 import org.xmlpull.v1.XmlPullParser;
 
 import java.io.BufferedReader;
@@ -21,7 +23,7 @@ public class HTTPDownloader {
     private String groupName="О719Б";
     private String groups;
 
-    public void Download() throws IOException {
+    public void Download(String groupName) throws IOException {
         groups= "";
         StringBuilder xmlResult = new StringBuilder();
         BufferedReader reader = null;
@@ -45,13 +47,17 @@ public class HTTPDownloader {
                     List.of(body.split("<Group Number=\""))) {
                 groups+=group.substring(0,group.indexOf("\""));
                 groups+="\n";
-                if(group.contains(groupName))
-                    updatedGroup= new Group(group);
+                if(group.contains(groupName)) {
+                    updatedGroup = new Group(group);
+                }
 
             }
             if(updatedGroup!=null)
             {
+                Log.d("HTTPDOWNLOADER", "Download updatedGROUP: "+updatedGroup.getName());
                 myGroup=updatedGroup;
+                this.groupName = myGroup.getName();
+                Log.d("HTTPDOWNLOADER", "Download mygroupAFTER: "+myGroup.getName());
             }
 
         } finally {
@@ -79,8 +85,4 @@ public class HTTPDownloader {
         return currentGroup;
     }
 
-    public void setGroupName(String newGroupName)
-    {
-        this.groupName=newGroupName;
-    }
 }

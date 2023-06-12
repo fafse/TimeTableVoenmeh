@@ -3,6 +3,9 @@ package com.example.timetablevoenmeh.TimeTableHandler.TimeTable;
 
 import android.icu.util.LocaleData;
 import android.util.Log;
+import android.widget.Toast;
+
+import com.example.timetablevoenmeh.TimeTableHandler.MainActivity;
 
 import java.io.IOException;
 import java.io.Serializable;
@@ -32,8 +35,9 @@ public class TimeTableHandler implements Serializable {
             myGroup = myGroupSaver.readGroup();
             Log.i("TIMETABLEHANDLER","READING MYGROUP...");
         }
-        if (groupSaver.isExists())
+        if (groupSaver.isExists()) {
             groupListNames = groupSaver.openText();
+        }
         if (myGroup == null) {
             this.groupName = groupName;
             try {
@@ -51,8 +55,7 @@ public class TimeTableHandler implements Serializable {
     private void update() throws IOException {
         Log.d("TimeTableHandler", "Update: " + groupName);
         downloader = new HTTPDownloader();
-        downloader.setGroupName(groupName);
-        downloader.Download();
+        downloader.Download(groupName);
         groupSaver.saveText(downloader.getGroups());
         if(groupListNames==null)
         {
@@ -61,34 +64,38 @@ public class TimeTableHandler implements Serializable {
         //Log.d("DOWNLOADER", "groups: "+groupSaver.openText());
         myGroup = downloader.getCurrentGroup();
         groupName = myGroup.getName();
+        Log.i("TIMETABLEHANDLER", "update: "+groupName);
         myGroupSaver.saveGroup(myGroup);
     }
 
 
     public ArrayList<String> getTimeTable(String dayOfWeek, boolean isEven) {
-        Log.d("TIMETABLEHANDLER", "getTimeTable: " + dayOfWeek + " " + isEven);
-        return myGroup.getTimeTable(dayOfWeek, isEven);
+        if (myGroup!=null) {
+            Log.d("TIMETABLEHANDLER", "getTimeTable: " + dayOfWeek + " " + isEven);
+            return myGroup.getTimeTable(dayOfWeek, isEven);
+        }
+        return null;
     }
 
 
-    public boolean setGroupName(String newGroupName) {
+    public boolean setGroupName(String newGroupName) throws IOException {
         if (newGroupName.length() < 4) return false;
         newGroupName = newGroupName.toUpperCase();
         Log.d("TIMETABLEHANDLER", "setGroupName: " + newGroupName);
         if(groupListNames==null) {
-            try {
                 update();
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
         }
-        if (groupListNames.contains(newGroupName) && newGroupName != "") {
+        Log.d("TIMETABLEHANDLER", "setGroupName: UPDATED");
+        if (groupListNames!=null&&groupListNames.contains(newGroupName) && newGroupName != "") {
+            String oldGroupName=groupName;
             groupName = newGroupName;
             try {
                 update();
+                Log.i("TIMETABLEHANDLER", "setGroupName: "+downloader.getCurrentGroup().getName());
+                groupName=downloader.getCurrentGroup().getName();
                 return true;
             } catch (IOException e) {
-                Log.d("TIMETABLEHANDLER", "Update: " + new RuntimeException(e));
+                groupName=oldGroupName;
             }
         }
         return false;

@@ -38,7 +38,7 @@ public class FileWorker {
     }
     // сохранение файла
     public void saveText(String text){
-
+        if(text.equals("")) return;
         FileOutputStream fos = null;
         try {
             Log.d("FILEWORKER", "saveText: "+path.toString());
@@ -67,6 +67,7 @@ public class FileWorker {
             byte[] bytes = new byte[fin.available()];
             fin.read(bytes);
             text = new String (bytes);
+            if(text.equals("")) return null;
         }
         catch(IOException ex) {
 
@@ -86,6 +87,7 @@ public class FileWorker {
         return text;
     }
     public void saveGroup(Group group){
+        if(group==null) return;
         Log.d("SAVEGROUP", "saveGroup: SAVING "+group.getName());
         FileOutputStream fos = null;
         ObjectOutputStream os=null;
