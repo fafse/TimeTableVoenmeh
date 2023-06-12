@@ -44,6 +44,13 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (Build.VERSION.SDK_INT >= 30) {
+            if(!Environment.isExternalStorageManager()) {
+                Intent getpermission = new Intent();
+                getpermission.setAction(Settings.ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION);
+                startActivity(getpermission);
+            }
+        }
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         new Thread(new Runnable() {
             public void run() {
@@ -71,13 +78,7 @@ public class MainActivity extends AppCompatActivity {
 
 
 // используем адаптер данных
-        if (Build.VERSION.SDK_INT >= 30) {
-            while (!Environment.isExternalStorageManager()) {
-                Intent getpermission = new Intent();
-                getpermission.setAction(Settings.ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION);
-                startActivity(getpermission);
-            }
-        }
+
 
     }
 
