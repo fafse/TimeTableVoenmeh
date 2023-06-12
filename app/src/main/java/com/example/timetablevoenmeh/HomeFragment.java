@@ -143,7 +143,7 @@ public class HomeFragment extends Fragment {
                 }).start();
 
             }
-    });
+        });
     }
 
     private void nextDay() {
@@ -160,27 +160,22 @@ public class HomeFragment extends Fragment {
 
 
     private void loadTable() {
-        Log.i(TAG, "loadTable: "+dateFormatter.getCurrentDate());
-        lessonsList = timeTableHandler.getTimeTable(
-                dateFormatter.getDayOfWeek(),
-                dateFormatter.isThisWeekEven());
-        if (lessonsList != null)
-            if (lessonsList.size() == 0) {
-                adapter = null;
-                lessonNotFoundTextView.setText("На выбранную дату не найдено предметов");
-            } else {
-                if(context==null)
-                {
-                    Log.i(TAG, "loadTable: GETCONTEXT======NULL");
+            lessonsList = timeTableHandler.getTimeTable(
+                    dateFormatter.getDayOfWeek(),
+                    dateFormatter.isThisWeekEven());
+            if (lessonsList != null)
+                if (lessonsList.size() == 0) {
+                    adapter = null;
+                    lessonNotFoundTextView.setText("На выбранную дату не найдено предметов");
+                } else {
+                    if (context == null) {
+                    }
+                    adapter = new ArrayAdapter<>(context,
+                            android.R.layout.simple_list_item_1, lessonsList);
+                    lessonNotFoundTextView.setText("");
                 }
-                adapter = new ArrayAdapter<>(context,
-                        android.R.layout.simple_list_item_1, lessonsList);
-                lessonNotFoundTextView.setText("");
-            }
-        dataTextView.setText(dateFormatter.getCurrentDate());
-        toolBarTextView.setText(timeTableHandler.getGroupName());
-        Log.d("TAG", "run: END");
-
+            dataTextView.setText(dateFormatter.getCurrentDate());
+            toolBarTextView.setText(timeTableHandler.getGroupName());
 
     }
 

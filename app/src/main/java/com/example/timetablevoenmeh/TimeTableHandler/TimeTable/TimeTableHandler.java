@@ -25,7 +25,7 @@ public class TimeTableHandler implements Serializable {
     private FileWorker groupSaver;
     private FileWorker myGroupSaver;
     private String groupListNames;
-
+    private String TAG="TimeTableHandler";
     public TimeTableHandler(String groupName) {
         groupSaver = new FileWorker("Groups.txt");
         myGroupSaver = new FileWorker("CurrentGroup.ser");
@@ -39,15 +39,17 @@ public class TimeTableHandler implements Serializable {
             groupListNames = groupSaver.openText();
         }
         if (myGroup == null) {
+            Log.i(TAG, "TimeTableHandler: mygroup=null");
             this.groupName = groupName;
             try {
+                Log.i(TAG, "TimeTableHandler: I UPDATE");
                 update();
+                Log.i(TAG, "TimeTableHandler: I UPDATED=========================");
             } catch (IOException e) {
                 Log.d("TIMETABLEHANDLER", "Update: " + new RuntimeException(e));
             }
         } else {
             groupName = myGroup.getName();
-            Log.d(groupName, "savedGroup: " + myGroup.getTimeTable("Понедельник", true));
         }
         this.groupName = groupName;
     }
@@ -55,23 +57,24 @@ public class TimeTableHandler implements Serializable {
     private void update() throws IOException {
         Log.d("TimeTableHandler", "Update: " + groupName);
         downloader = new HTTPDownloader();
+        Log.i(TAG, "update:I START DOWNLOAD");
         downloader.Download(groupName);
-        groupSaver.saveText(downloader.getGroups());
-        if(groupListNames==null)
-        {
-            groupListNames=groupSaver.openText();
+        Log.i(TAG, "update: DOWNLOADED");
+        if(downloader.getGroups()!=null)
+            groupSaver.saveText(downloader.getGroups());
+        groupListNames=groupSaver.openText();
+        if(downloader.getCurrentGroup()!=null) {
+            myGroup = downloader.getCurrentGroup();
+            groupName = myGroup.getName();
         }
-        //Log.d("DOWNLOADER", "groups: "+groupSaver.openText());
-        myGroup = downloader.getCurrentGroup();
-        groupName = myGroup.getName();
         Log.i("TIMETABLEHANDLER", "update: "+groupName);
-        myGroupSaver.saveGroup(myGroup);
+        if(myGroup!=null)
+            myGroupSaver.saveGroup(myGroup);
     }
 
 
     public ArrayList<String> getTimeTable(String dayOfWeek, boolean isEven) {
         if (myGroup!=null) {
-            Log.d("TIMETABLEHANDLER", "getTimeTable: " + dayOfWeek + " " + isEven);
             return myGroup.getTimeTable(dayOfWeek, isEven);
         }
         return null;
@@ -81,17 +84,14 @@ public class TimeTableHandler implements Serializable {
     public boolean setGroupName(String newGroupName) throws IOException {
         if (newGroupName.length() < 4) return false;
         newGroupName = newGroupName.toUpperCase();
-        Log.d("TIMETABLEHANDLER", "setGroupName: " + newGroupName);
         if(groupListNames==null) {
                 update();
         }
-        Log.d("TIMETABLEHANDLER", "setGroupName: UPDATED");
         if (groupListNames!=null&&groupListNames.contains(newGroupName) && newGroupName != "") {
             String oldGroupName=groupName;
             groupName = newGroupName;
             try {
                 update();
-                Log.i("TIMETABLEHANDLER", "setGroupName: "+downloader.getCurrentGroup().getName());
                 groupName=downloader.getCurrentGroup().getName();
                 return true;
             } catch (IOException e) {

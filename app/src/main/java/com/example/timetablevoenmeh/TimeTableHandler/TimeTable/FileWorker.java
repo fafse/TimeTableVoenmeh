@@ -17,133 +17,126 @@ public class FileWorker {
     private String fileName;
     private File path;
 
-    public FileWorker(String fileName)
-    {
-        this.fileName=fileName;
-        path =new File(Environment.getExternalStorageDirectory(),"TimeTableVoenmeh");
-        if(!path.exists())
+    public FileWorker(String fileName) {
+        this.fileName = fileName;
+        path = new File(Environment.getExternalStorageDirectory(), "TimeTableVoenmeh");
+        if (!path.exists())
             path.mkdir();
-        path=new File(path.getAbsolutePath(),fileName);
-        if(!path.exists())
+        path = new File(path.getAbsolutePath(), fileName);
+        if (!path.exists())
+            try {
+                path.createNewFile();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+    }
+
+    public boolean isExists() {
+        return path.exists();
+    }
+
+    // сохранение файла
+    public void saveText(String text) {
+        if (text.equals("")) return;
+        FileOutputStream fos = null;
         try {
-            path.createNewFile();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+            Log.d("FILEWORKER", "saveText: " + path.toString());
+            fos = new FileOutputStream(path);
+            text = text.toUpperCase();
+            fos.write(text.getBytes());
+        } catch (IOException ex) {
+            Log.d("EXCEPTION", "FILEWORKEREXCEPTION: " + ex.getMessage());
+        } finally {
+            try {
+                if (fos != null)
+                    fos.close();
+            } catch (IOException ex) {
+                Log.d("EXCEPTION", "FILEWORKEREXCEPTION: " + ex.getMessage());
+            }
         }
     }
 
-    public boolean isExists()
-    {
-        return path.exists();
-    }
-    // сохранение файла
-    public void saveText(String text){
-        if(text.equals("")) return;
-        FileOutputStream fos = null;
-        try {
-            Log.d("FILEWORKER", "saveText: "+path.toString());
-            fos= new FileOutputStream(path);
-            text=text.toUpperCase();
-            fos.write(text.getBytes());
-        }
-        catch(IOException ex) {
-            Log.d("EXCEPTION", "FILEWORKEREXCEPTION: "+ ex.getMessage());
-        } finally{
-            try{
-                if(fos!=null)
-                    fos.close();
-            }
-            catch(IOException ex){
-                Log.d("EXCEPTION", "FILEWORKEREXCEPTION: "+ ex.getMessage());
-            }
-        }
-    }
     // открытие файла
-    public String openText(){
-        String text="";
+    public String openText() {
+        String text = "";
         FileInputStream fin = null;
         try {
             fin = new FileInputStream(path);
             byte[] bytes = new byte[fin.available()];
             fin.read(bytes);
-            text = new String (bytes);
-            if(text.equals("")) return null;
-        }
-        catch(IOException ex) {
+            text = new String(bytes);
+            if (text.equals("")) return null;
+        } catch (IOException ex) {
 
-            Log.d("EXCEPTION", "FILEWORKEREXCEPTION: "+ ex.getMessage());
-        }
-        finally{
+            Log.d("EXCEPTION", "FILEWORKEREXCEPTION: " + ex.getMessage());
+        } finally {
 
-            try{
-                if(fin!=null)
+            try {
+                if (fin != null)
                     fin.close();
-            }
-            catch(IOException ex){
+            } catch (IOException ex) {
 
-                Log.d("EXCEPTION", "FILEWORKEREXCEPTION: "+ ex.getMessage());
+                Log.d("EXCEPTION", "FILEWORKEREXCEPTION: " + ex.getMessage());
             }
         }
         return text;
     }
-    public void saveGroup(Group group){
-        if(group==null) return;
-        Log.d("SAVEGROUP", "saveGroup: SAVING "+group.getName());
+
+    public void saveGroup(Group group) {
+        if (group == null) return;
+        Log.d("SAVEGROUP", "saveGroup: SAVING " + group.getName());
         FileOutputStream fos = null;
-        ObjectOutputStream os=null;
+        ObjectOutputStream os = null;
         try {
-            fos= new FileOutputStream(path);
+            fos = new FileOutputStream(path);
             os = new ObjectOutputStream(fos);
             os.writeObject(group);
-        }
-        catch(IOException ex) {
-            Log.d("EXCEPTION", "FILEWORKEREXCEPTION: "+ ex.getMessage());
-            Log.d("EXCEPTION SAVING", "saveGroup: "+ex);
-        } finally{
-            try{
-                if(os!=null)
+        } catch (IOException ex) {
+            Log.d("EXCEPTION", "FILEWORKEREXCEPTION: " + ex.getMessage());
+            Log.d("EXCEPTION SAVING", "saveGroup: " + ex);
+        } finally {
+            try {
+                if (os != null)
                     os.close();
-                if(fos!=null)
+                if (fos != null)
                     fos.close();
-            }
-            catch(IOException ex){
-                Log.d("EXCEPTION", "FILEWORKEREXCEPTION: "+ ex.getMessage());
+            } catch (IOException ex) {
+                Log.d("EXCEPTION", "FILEWORKEREXCEPTION: " + ex.getMessage());
             }
         }
     }
+
     // открытие файла
-    public Group readGroup(){
+    public Group readGroup() {
         Log.d("READGROUP", "saveGroup: READING ");
 
         FileInputStream fin = null;
-        ObjectInput is=null;
-        Group group=null;
+        ObjectInput is = null;
+        Group group = null;
         try {
             fin = new FileInputStream(path);
             is = new ObjectInputStream(fin);
-            group =(Group) is.readObject();
-            if(group!=null)
-                Log.d("READGROUP", "readGroup: "+group.getName());
+            group = (Group) is.readObject();
+            if (group != null)
+                Log.d("READGROUP", "readGroup: " + group.getName());
             else
                 Log.d("READ", "readGroup: ");
-        }
-        catch(IOException ex) {
+        } catch (IOException ex) {
 
-            Log.d("EXCEPTION", "FILEWORKEREXCEPTION writing file: "+ ex.getMessage());
+            Log.d("EXCEPTION", "FILEWORKEREXCEPTION writing file: " + ex.getMessage());
         } catch (ClassNotFoundException e) {
             throw new RuntimeException(e);
-        } finally{
+        } finally {
 
-            try{
-                if(is!=null)
+            try {
+                if (is != null)
                     is.close();
-                if(fin!=null)
+                if (fin != null)
                     fin.close();
 
-            }
-            catch(IOException ex){
+            } catch (IOException ex) {
 
-                Log.d("EXCEPTION", "FILEWORKEREXCEPTION reading file: "+ ex.getMessage());
+                Log.d("EXCEPTION", "FILEWORKEREXCEPTION reading file: " + ex.getMessage());
             }
         }
         return group;

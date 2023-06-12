@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
 import android.provider.Settings;
 import android.util.Log;
 
@@ -44,13 +45,18 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = ActivityMainBinding.inflate(getLayoutInflater());
+        new Thread(new Runnable() {
+            public void run() {
+
+                timeTableHandler= new TimeTableHandler("О719Б");
+
+            }
+        }).start();
+
+        dateFormatter=new DateFormatter();
+        dateFormatter.update();
         setContentView(binding.getRoot());
         Bundle bundle = new Bundle();
-        timeTableHandler= new TimeTableHandler("О719Б");
-        dateFormatter=new DateFormatter();
-        Log.i(TAG, "onCreate: HEREEEEEEEEE");
-        dateFormatter.update();
-
         replaceFragment(homeFragment, bundle);
         binding.bottomNavigationView.setOnItemSelectedListener(item -> {
             if (item.getItemId() == R.id.home) {
@@ -61,6 +67,8 @@ public class MainActivity extends AppCompatActivity {
 
             return true;
         });
+
+
 
 // используем адаптер данных
         if (Build.VERSION.SDK_INT >= 30) {
@@ -75,6 +83,8 @@ public class MainActivity extends AppCompatActivity {
 
 
     private void replaceFragment(Fragment fragment, Bundle bundle) {
+        do {
+        }while(timeTableHandler==null);
         DateFormatter tmpData = homeFragment.getDateFormatter();
         TimeTableHandler tmpTimeTable=null;
         if(fragment instanceof HomeFragment)
@@ -88,7 +98,6 @@ public class MainActivity extends AppCompatActivity {
             if (!tmpData.equals(dateFormatter))
             {
                 dateFormatter=tmpData;
-                Log.i("MAINACTIVITY", "replaceFragment: "+dateFormatter.getCurrentDate());
             }
         }
         if(tmpTimeTable!=null)
@@ -98,7 +107,6 @@ public class MainActivity extends AppCompatActivity {
                 timeTableHandler=tmpTimeTable;
             }
         }
-        Log.i("MAINACTIVITY", "onCreate: "+dateFormatter.getDayOfWeek());
         bundle.putSerializable("TIMETABLEHANDLER",timeTableHandler);
         bundle.putSerializable("DATAFORMATTER", dateFormatter);
         fragment.setArguments(bundle);

@@ -22,6 +22,7 @@ public class HTTPDownloader {
 
     private String groupName="О719Б";
     private String groups;
+    private String TAG="HTTPDOWNLOADER";
 
     public void Download(String groupName) throws IOException {
         groups= "";
@@ -31,16 +32,19 @@ public class HTTPDownloader {
         HttpsURLConnection connection = null;
 
         try {
+            Log.i(TAG, "Download: I TRY CONNECT");
             URL url = new URL(defaultUrl);
             connection = (HttpsURLConnection) url.openConnection();
             stream = connection.getInputStream();
             reader = new BufferedReader(new InputStreamReader(stream));
-
+            Log.i(TAG, "Download: CONNECTED");
             String line;
             while ((line = reader.readLine()) != null) {
                 xmlResult.append(line + "\n");
             }
+            Log.i(TAG, "Download: GOR BODY");
             String body = xmlResult.toString();
+            Log.i(TAG, "Download: "+body.length());
             body=body.substring(body.indexOf("<Group Number=\"")+15,body.length());
             Group updatedGroup=null;
             for (String group :
