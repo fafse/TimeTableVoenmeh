@@ -53,17 +53,23 @@ public class HomeFragment extends Fragment {
         // Required empty public constructor
     }
 
+
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Bundle bundle= this.getArguments();
         if(bundle!=null)
         {
-            groupName=bundle.getString("groupName","А211Б");
-            Log.i(TAG, "onCreate: "+groupName);
-            String tmp =bundle.getString("calendar","-");
-            Log.i(TAG, "onCreate: "+tmp);
+            timeTableHandler=(TimeTableHandler) bundle.getSerializable("TIMETABLEHANDLER");
+            dateFormatter=(DateFormatter) bundle.getSerializable("DATAFORMATTER");
+            Log.i(TAG, "onCreate: "+dateFormatter.getCurrentDate());
         }
+        else
+        {
+            Log.i(TAG, "onCreate: bundle NULL");
+        }
+
     }
 
     @Override
@@ -88,25 +94,6 @@ public class HomeFragment extends Fragment {
 
         }
 
-        dateFormatter = new DateFormatter();
-        new Thread(new Runnable() {
-            public void run() {
-
-                dateFormatter.update();
-                timeTableHandler = new TimeTableHandler(groupName);
-                loadTable();
-
-                setAdapter(timeTableList, adapter);
-                swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-                    @Override
-                    public void onRefresh() {
-                        timeTableHandler = new TimeTableHandler(timeTableHandler.getGroupName());
-                        loadTable();
-                        swipeRefreshLayout.setRefreshing(false);
-                    }
-                });
-            }
-        }).start();
     }
 
     @Override
@@ -122,7 +109,17 @@ public class HomeFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
+        loadTable();
 
+        setAdapter(timeTableList, adapter);
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                timeTableHandler = new TimeTableHandler(timeTableHandler.getGroupName());
+                loadTable();
+                swipeRefreshLayout.setRefreshing(false);
+            }
+        });
         buttonNext.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -163,6 +160,7 @@ public class HomeFragment extends Fragment {
 
 
     private void loadTable() {
+        Log.i(TAG, "loadTable: "+dateFormatter.getCurrentDate());
         lessonsList = timeTableHandler.getTimeTable(
                 dateFormatter.getDayOfWeek(),
                 dateFormatter.isThisWeekEven());
@@ -194,6 +192,15 @@ public class HomeFragment extends Fragment {
             }
         });
     }
+
+    public TimeTableHandler getTimeTableHandler() {
+        return timeTableHandler;
+    }
+
+    public DateFormatter getDateFormatter() {
+        return dateFormatter;
+    }
+
     private class GestureHandler implements View.OnTouchListener {
 
         GestureDetector gestureDetector;

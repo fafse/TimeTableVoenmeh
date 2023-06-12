@@ -1,11 +1,14 @@
 package com.example.timetablevoenmeh.TimeTableHandler;
 
+import static android.content.ContentValues.TAG;
+
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.Settings;
+import android.util.Log;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -16,8 +19,11 @@ import androidx.fragment.app.FragmentTransaction;
 import com.example.timetablevoenmeh.HomeFragment;
 import com.example.timetablevoenmeh.R;
 import com.example.timetablevoenmeh.SettingsFragment;
+import com.example.timetablevoenmeh.TimeTableHandler.TimeTable.DateFormatter;
+import com.example.timetablevoenmeh.TimeTableHandler.TimeTable.TimeTableHandler;
 import com.example.timetablevoenmeh.databinding.ActivityMainBinding;
 
+import java.io.Serializable;
 import java.util.Calendar;
 
 public class MainActivity extends AppCompatActivity {
@@ -25,27 +31,32 @@ public class MainActivity extends AppCompatActivity {
     ConstraintLayout layout;
     ActivityMainBinding binding;
 
-    private String groupName = "О719Б";
-    private Calendar calendar;
+
+
+    private TimeTableHandler timeTableHandler;
+    private DateFormatter dateFormatter;
+
+    private HomeFragment homeFragment=new HomeFragment();
+    private SettingsFragment settingsFragment =new SettingsFragment();
 
     @SuppressLint("NonConstantResourceId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        calendar = Calendar.getInstance();
-        calendar.add(Calendar.DATE, 1);
         super.onCreate(savedInstanceState);
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-        String tmp = String.valueOf(calendar.get(Calendar.DATE));
         Bundle bundle = new Bundle();
-        bundle.putString("groupName", groupName);
-        bundle.putString("calendar", tmp);
-        replaceFragment(new HomeFragment(), bundle);
+        timeTableHandler= new TimeTableHandler("О719Б");
+        dateFormatter=new DateFormatter();
+        Log.i(TAG, "onCreate: HEREEEEEEEEE");
+        dateFormatter.update();
+
+        replaceFragment(homeFragment, bundle);
         binding.bottomNavigationView.setOnItemSelectedListener(item -> {
             if (item.getItemId() == R.id.home) {
-                replaceFragment(new HomeFragment(), bundle);
+                replaceFragment(homeFragment, bundle);
             } else if (item.getItemId() == R.id.settings) {
-                replaceFragment(new SettingsFragment(), bundle);
+                replaceFragment(settingsFragment, bundle);
             }
 
             return true;
@@ -64,6 +75,32 @@ public class MainActivity extends AppCompatActivity {
 
 
     private void replaceFragment(Fragment fragment, Bundle bundle) {
+        DateFormatter tmpData = homeFragment.getDateFormatter();
+        TimeTableHandler tmpTimeTable=null;
+        if(fragment instanceof HomeFragment)
+            tmpTimeTable = homeFragment.getTimeTableHandler();
+        else {
+            tmpTimeTable = settingsFragment.getTimeTableHandler();
+        }
+
+        if(tmpData!=null)
+        {
+            if (!tmpData.equals(dateFormatter))
+            {
+                dateFormatter=tmpData;
+                Log.i("MAINACTIVITY", "replaceFragment: "+dateFormatter.getCurrentDate());
+            }
+        }
+        if(tmpTimeTable!=null)
+        {
+            if(!tmpTimeTable.equals(timeTableHandler))
+            {
+                timeTableHandler=tmpTimeTable;
+            }
+        }
+        Log.i("MAINACTIVITY", "onCreate: "+dateFormatter.getDayOfWeek());
+        bundle.putSerializable("TIMETABLEHANDLER",timeTableHandler);
+        bundle.putSerializable("DATAFORMATTER", dateFormatter);
         fragment.setArguments(bundle);
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();

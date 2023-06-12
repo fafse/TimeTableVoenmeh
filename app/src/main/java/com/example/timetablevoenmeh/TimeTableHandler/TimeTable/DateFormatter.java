@@ -2,13 +2,14 @@ package com.example.timetablevoenmeh.TimeTableHandler.TimeTable;
 
 import android.util.Log;
 
+import java.io.Serializable;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
-public class DateFormatter {
+public class DateFormatter implements Serializable {
     private Calendar date;
     public boolean isThisWeekEven() {
         Log.d("DATEFORMATTER", "isThisWeekEven: "+date.get(Calendar.WEEK_OF_MONTH)%2);
