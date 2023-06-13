@@ -44,6 +44,11 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if(savedInstanceState!=null)
+        {
+            timeTableHandler=(TimeTableHandler) savedInstanceState.getSerializable("TIMETABLEHANDLER");
+            dateFormatter=(DateFormatter) savedInstanceState.getSerializable("DATAFORMATTER");
+        }
         if (Build.VERSION.SDK_INT >= 30) {
             if(!Environment.isExternalStorageManager()) {
                 Intent getpermission = new Intent();
@@ -54,14 +59,15 @@ public class MainActivity extends AppCompatActivity {
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         new Thread(new Runnable() {
             public void run() {
-
-                timeTableHandler= new TimeTableHandler("О719Б");
+                if(timeTableHandler==null)
+                    timeTableHandler= new TimeTableHandler("О719Б");
 
             }
         }).start();
-
-        dateFormatter=new DateFormatter();
-        dateFormatter.update();
+        if(dateFormatter==null) {
+            dateFormatter = new DateFormatter();
+            dateFormatter.update();
+        }
         setContentView(binding.getRoot());
         Bundle bundle = new Bundle();
         replaceFragment(homeFragment, bundle);
@@ -116,6 +122,12 @@ public class MainActivity extends AppCompatActivity {
         fragmentTransaction.replace(R.id.fragmentContainerView, fragment);
         fragmentTransaction.commit();
 
+    }
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        outState.putSerializable("TIMETABLEHANDLER",timeTableHandler);
+        outState.putSerializable("DATAFORMATTER",dateFormatter);
+        super.onSaveInstanceState(outState);
     }
 
 

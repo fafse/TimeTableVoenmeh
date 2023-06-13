@@ -9,6 +9,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.Serializable;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -16,7 +17,7 @@ import java.util.List;
 
 import javax.net.ssl.HttpsURLConnection;
 
-public class HTTPDownloader {
+public class HTTPDownloader implements Serializable {
     private String defaultUrl = "https://www.voenmeh.ru/templates/jd_atlanta/js/TimetableGroup33.xml";
     private Group myGroup;
 
