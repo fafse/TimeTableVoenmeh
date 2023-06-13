@@ -26,6 +26,7 @@ import com.example.timetablevoenmeh.databinding.ActivityMainBinding;
 
 import java.io.Serializable;
 import java.util.Calendar;
+import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -39,6 +40,7 @@ public class MainActivity extends AppCompatActivity {
 
     private HomeFragment homeFragment=new HomeFragment();
     private SettingsFragment settingsFragment =new SettingsFragment();
+    private String currentFragment;
 
     @SuppressLint("NonConstantResourceId")
     @Override
@@ -48,6 +50,7 @@ public class MainActivity extends AppCompatActivity {
         {
             timeTableHandler=(TimeTableHandler) savedInstanceState.getSerializable("TIMETABLEHANDLER");
             dateFormatter=(DateFormatter) savedInstanceState.getSerializable("DATAFORMATTER");
+            currentFragment=savedInstanceState.getString("FRAGMENT");
         }
         if (Build.VERSION.SDK_INT >= 30) {
             if(!Environment.isExternalStorageManager()) {
@@ -70,7 +73,11 @@ public class MainActivity extends AppCompatActivity {
         }
         setContentView(binding.getRoot());
         Bundle bundle = new Bundle();
-        replaceFragment(homeFragment, bundle);
+        if(currentFragment==null||currentFragment.equals("HomeFragment"))
+            replaceFragment(homeFragment, bundle);
+        else if (currentFragment.equals("SettingsFragment")) {
+            replaceFragment(settingsFragment,bundle);
+        }
         binding.bottomNavigationView.setOnItemSelectedListener(item -> {
             if (item.getItemId() == R.id.home) {
                 replaceFragment(homeFragment, bundle);
@@ -94,10 +101,13 @@ public class MainActivity extends AppCompatActivity {
         }while(timeTableHandler==null);
         DateFormatter tmpData = homeFragment.getDateFormatter();
         TimeTableHandler tmpTimeTable=null;
-        if(fragment instanceof HomeFragment)
+        if(fragment instanceof HomeFragment) {
             tmpTimeTable = homeFragment.getTimeTableHandler();
+            currentFragment="HomeFragment";
+        }
         else {
             tmpTimeTable = settingsFragment.getTimeTableHandler();
+            currentFragment="SettingsFragment";
         }
 
         if(tmpData!=null)
@@ -127,6 +137,12 @@ public class MainActivity extends AppCompatActivity {
     protected void onSaveInstanceState(Bundle outState) {
         outState.putSerializable("TIMETABLEHANDLER",timeTableHandler);
         outState.putSerializable("DATAFORMATTER",dateFormatter);
+        if(Objects.equals(currentFragment, "HomeFragment"))
+        {
+            outState.putString("FRAGMENT","HomeFragment");
+        } else if (Objects.equals(currentFragment, "SettingsFragment")) {
+            outState.putString("FRAGMENT","SettingsFragment");
+        }
         super.onSaveInstanceState(outState);
     }
 
