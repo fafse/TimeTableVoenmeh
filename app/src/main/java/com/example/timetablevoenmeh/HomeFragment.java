@@ -2,49 +2,38 @@ package com.example.timetablevoenmeh;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
-
 import android.util.Log;
 import android.view.GestureDetector;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.example.timetablevoenmeh.TimeTableHandler.MainActivity;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+
 import com.example.timetablevoenmeh.TimeTableHandler.TimeTable.DateFormatter;
 import com.example.timetablevoenmeh.TimeTableHandler.TimeTable.Lesson;
 import com.example.timetablevoenmeh.TimeTableHandler.TimeTable.TimeTableHandler;
 import com.example.timetablevoenmeh.TimeTableHandler.TimeTable.customListVIew.CustomAdapter;
 
-import java.io.IOException;
-import java.text.BreakIterator;
 import java.util.ArrayList;
-import java.util.Calendar;
 
 public class HomeFragment extends Fragment {
 
     // TODO: Rename and change types of parameters
-    private String TAG="HOMEFRAGMENTER";
-    private TextView toolBarTextView, groupNameTextView, dataTextView,lessonNotFoundTextView;
-    private Button buttonPrev, buttonNext;
+    private String TAG = "HOMEFRAGMENTER";
+    private TextView toolBarTextView, groupNameTextView, dataTextView, lessonNotFoundTextView;
     private TimeTableHandler timeTableHandler;
     private ArrayList<Lesson> lessonsList;
     private DateFormatter dateFormatter;
     private ListView timeTableList;
     private CustomAdapter adapter;
-    private SwipeRefreshLayout swipeRefreshLayout;
+    private GestureHandler gestureHandler;
 
     private View view;
     private Context context;
@@ -55,54 +44,49 @@ public class HomeFragment extends Fragment {
     }
 
 
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Bundle bundle= this.getArguments();
-        if(bundle!=null)
-        {
-            timeTableHandler=(TimeTableHandler) bundle.getSerializable("TIMETABLEHANDLER");
-            dateFormatter=(DateFormatter) bundle.getSerializable("DATAFORMATTER");
-            Log.i(TAG, "onCreate: "+dateFormatter.getCurrentDate());
-        }
-        else
-        {
+        Bundle bundle = this.getArguments();
+        if (bundle != null) {
+            timeTableHandler = (TimeTableHandler) bundle.getSerializable("TIMETABLEHANDLER");
+            dateFormatter = (DateFormatter) bundle.getSerializable("DATAFORMATTER");
+            Log.i(TAG, "onCreate: " + dateFormatter.getCurrentDate());
+        } else {
             Log.i(TAG, "onCreate: bundle NULL");
         }
-
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        this.activity=getActivity();
-        if(view != null) {
-            swipeRefreshLayout = view.findViewById(R.id.swipe_refresh);
+        this.activity = getActivity();
+        if (view != null) {
             timeTableList = view.findViewById(R.id.ListTimeTable);
             toolBarTextView = view.findViewById(R.id.toolBarTextView);
             dataTextView = view.findViewById(R.id.dateTextView);
-            lessonNotFoundTextView=view.findViewById(R.id.lessonNotFoundTextView);
-            buttonNext = view.findViewById(R.id.buttonNext);
-            buttonPrev = view.findViewById(R.id.buttonPrev);
+            lessonNotFoundTextView = view.findViewById(R.id.lessonNotFoundTextView);
             groupNameTextView = view.findViewById(R.id.groupNameInput);
+            gestureHandler = new GestureHandler();
+            view.setOnTouchListener(gestureHandler);
+            timeTableList.setOnTouchListener(gestureHandler);
             Log.i(TAG, "onActivityCreated: VIEW!=NULL");
-            if(timeTableList==null)
+            if (timeTableList == null)
                 Log.i(TAG, "onActivityCreated: TIMETABLELIST=NULL");
-        }else
-        {
+        } else {
             Log.i(TAG, "onActivityCreated: VIEW=NULL");
 
         }
 
     }
 
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        this.view = inflater.inflate(R.layout.fragment_home,  container, false);
-        this.context=getContext();
+        this.view = inflater.inflate(R.layout.fragment_home, container, false);
+        this.context = getContext();
 
         return view;
     }
@@ -113,38 +97,6 @@ public class HomeFragment extends Fragment {
         loadTable();
 
         setAdapter(timeTableList, adapter);
-        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                timeTableHandler = new TimeTableHandler(timeTableHandler.getGroupName());
-                loadTable();
-                swipeRefreshLayout.setRefreshing(false);
-            }
-        });
-        buttonNext.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                new Thread(new Runnable() {
-                    public void run() {
-                        nextDay();
-                    }
-                }).start();
-
-            }
-        });
-        buttonPrev.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                new Thread(new Runnable() {
-                    public void run() {
-                        prevDay();
-                    }
-                }).start();
-
-            }
-        });
     }
 
     private void nextDay() {
@@ -161,22 +113,22 @@ public class HomeFragment extends Fragment {
 
 
     private void loadTable() {
-            lessonsList = timeTableHandler.getTimeTable(
-                    dateFormatter.getDayOfWeek(),
-                    dateFormatter.isThisWeekEven());
-            if (lessonsList != null)
-                if (lessonsList.size() == 0) {
-                    adapter = null;
-                    lessonNotFoundTextView.setText("На выбранную дату не найдено предметов");
-                } else {
-                    if (context == null) {
-                    }
-                    adapter = new CustomAdapter(context,
-                             lessonsList);
-                    lessonNotFoundTextView.setText("");
+        lessonsList = timeTableHandler.getTimeTable(
+                dateFormatter.getDayOfWeek(),
+                dateFormatter.isThisWeekEven());
+        if (lessonsList != null)
+            if (lessonsList.size() == 0) {
+                adapter = null;
+                lessonNotFoundTextView.setText("На выбранную дату не найдено предметов");
+            } else {
+                if (context == null) {
                 }
-            dataTextView.setText(dateFormatter.getCurrentDate());
-            toolBarTextView.setText(timeTableHandler.getGroupName());
+                adapter = new CustomAdapter(context,
+                        lessonsList);
+                lessonNotFoundTextView.setText("");
+            }
+        dataTextView.setText(dateFormatter.getCurrentDate());
+        toolBarTextView.setText(timeTableHandler.getGroupName());
 
     }
 
@@ -201,7 +153,7 @@ public class HomeFragment extends Fragment {
 
         GestureDetector gestureDetector;
 
-        GestureHandler(View view) {
+        GestureHandler() {
             int threshold = 100;
             int velocity_threshold = 100;
 
@@ -221,10 +173,11 @@ public class HomeFragment extends Fragment {
                                     if (Math.abs(xDiff) > threshold && Math.abs(velocityX) > velocity_threshold) {
                                         if (xDiff > 0) {
                                             //right swipe
-                                            nextDay();
+                                            prevDay();
                                         } else {
                                             //left swipe
-                                            prevDay();
+                                            nextDay();
+
                                         }
                                     }
                                 }
@@ -234,8 +187,7 @@ public class HomeFragment extends Fragment {
                             return false;
                         }
                     };
-            gestureDetector=new GestureDetector(listener);
-            view.setOnTouchListener(this);
+            gestureDetector = new GestureDetector(listener);
         }
 
         @Override
