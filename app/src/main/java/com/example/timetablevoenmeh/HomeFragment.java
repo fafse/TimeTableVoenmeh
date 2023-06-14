@@ -24,7 +24,9 @@ import android.widget.Toast;
 
 import com.example.timetablevoenmeh.TimeTableHandler.MainActivity;
 import com.example.timetablevoenmeh.TimeTableHandler.TimeTable.DateFormatter;
+import com.example.timetablevoenmeh.TimeTableHandler.TimeTable.Lesson;
 import com.example.timetablevoenmeh.TimeTableHandler.TimeTable.TimeTableHandler;
+import com.example.timetablevoenmeh.TimeTableHandler.TimeTable.customListVIew.CustomAdapter;
 
 import java.io.IOException;
 import java.text.BreakIterator;
@@ -38,16 +40,15 @@ public class HomeFragment extends Fragment {
     private TextView toolBarTextView, groupNameTextView, dataTextView,lessonNotFoundTextView;
     private Button buttonPrev, buttonNext;
     private TimeTableHandler timeTableHandler;
-    private ArrayList<String> lessonsList;
+    private ArrayList<Lesson> lessonsList;
     private DateFormatter dateFormatter;
     private ListView timeTableList;
-    private ArrayAdapter<String> adapter;
+    private CustomAdapter adapter;
     private SwipeRefreshLayout swipeRefreshLayout;
 
     private View view;
     private Context context;
     private Activity activity;
-    private String groupName;
 
     public HomeFragment() {
         // Required empty public constructor
@@ -170,8 +171,8 @@ public class HomeFragment extends Fragment {
                 } else {
                     if (context == null) {
                     }
-                    adapter = new ArrayAdapter<>(context,
-                            android.R.layout.simple_list_item_1, lessonsList);
+                    adapter = new CustomAdapter(context,
+                             lessonsList);
                     lessonNotFoundTextView.setText("");
                 }
             dataTextView.setText(dateFormatter.getCurrentDate());
@@ -179,7 +180,7 @@ public class HomeFragment extends Fragment {
 
     }
 
-    private void setAdapter(final ListView list, final ArrayAdapter<String> adapter) {
+    private void setAdapter(final ListView list, final CustomAdapter adapter) {
         activity.runOnUiThread(new Runnable() {
             @Override
             public void run() {

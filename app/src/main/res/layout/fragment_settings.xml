@@ -8,26 +8,16 @@
     android:orientation="vertical"
     tools:context=".SettingsFragment">
 
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/settingsToolBar"
-        android:layout_width="match_parent"
-        android:layout_height="64dp"
-        android:background="?attr/colorPrimary"
-        android:minHeight="?attr/actionBarSize"
-        android:theme="?attr/actionBarTheme"
-        tools:layout_editor_absoluteX="0dp"
-        tools:layout_editor_absoluteY="-3dp" />
-
     <TextView
         android:id="@+id/settingsToolBarText"
-        android:layout_width="413dp"
+        android:layout_width="match_parent"
         android:layout_height="64dp"
         android:gravity="center"
         android:text="Настройки"
         android:textColor="@color/white"
         android:textSize="24sp"
-        tools:layout_editor_absoluteX="0dp"
-        tools:layout_editor_absoluteY="-2dp" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:layout_editor_absoluteX="-1dp" />
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/textInputLayout"
@@ -47,7 +37,7 @@
         android:layout_marginEnd="16dp"
         android:text="Найти"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/settingsToolBar" />
+        app:layout_constraintTop_toBottomOf="@+id/settingsToolBarText" />
 
     <TextView
         android:id="@+id/ErrorChangeGroupTextView"
@@ -71,11 +61,11 @@
         android:layout_marginTop="8dp"
         android:layout_marginEnd="80dp"
         android:ems="10"
-        android:hint="Name"
+        android:hint="Введите номер группы"
         android:inputType="text"
         app:layout_constraintEnd_toStartOf="@+id/groupNameInputButton"
         app:layout_constraintHorizontal_bias="0.409"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/settingsToolBar" />
+        app:layout_constraintTop_toBottomOf="@+id/settingsToolBarText" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

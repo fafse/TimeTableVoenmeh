@@ -35,16 +35,16 @@ public class Group implements Serializable {
         days.remove(0);
     }
 
-    public ArrayList<String> getTimeTable(String day, Boolean isEven)
+    public ArrayList<Lesson> getTimeTable(String day, Boolean isEven)
     {
-        ArrayList<String> result= new ArrayList<>();
+        ArrayList<Lesson> result= new ArrayList<>();
         for (int i = 0;i< days.size();i++)
         {
             if(days.get(i).getName().toLowerCase().equals(day.toLowerCase()))
             {
                 for(Lesson lesson: days.get(i).getLessons(isEven))
                 {
-                    result.add(lesson.toString());
+                    result.add(lesson);
                 }
                 break;
             }

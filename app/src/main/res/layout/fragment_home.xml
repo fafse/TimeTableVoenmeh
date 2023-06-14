@@ -9,48 +9,26 @@
     <!-- TODO: Update blank fragment layout -->
 
 
-    <TextView
-        android:id="@+id/lessonNotFoundTextView"
-        android:layout_width="262dp"
-        android:layout_height="101dp"
-        android:gravity="center"
-        android:textSize="24sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/toolbar"
-        app:layout_constraintVertical_bias="0.357" />
-
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/swipe_refresh"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="10dp"
+        android:layout_width="413dp"
+        android:layout_height="531dp"
+        android:layout_marginTop="65dp"
+        android:layout_marginBottom="150dp"
         android:layout_weight="1"
         app:layout_constraintBottom_toTopOf="@+id/buttonPrev"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/toolbar"
+        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0">
 
         <ListView
             android:id="@+id/ListTimeTable"
             android:layout_width="0dp"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            tools:listitem="@layout/row"></ListView>
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
-
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolbar"
-        android:layout_width="0dp"
-        android:layout_height="64dp"
-        android:background="?attr/colorPrimary"
-        android:minHeight="?attr/actionBarSize"
-        android:theme="?attr/actionBarTheme"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent"
-        tools:layout_editor_absoluteY="0dp" />
 
     <TextView
         android:id="@+id/dateTextView"
@@ -59,9 +37,7 @@
         android:gravity="center"
         android:textColor="#000000"
         android:textSize="24sp"
-        app:layout_constraintEnd_toEndOf="@+id/toolbar"
-        app:layout_constraintHorizontal_bias="0.982"
-        app:layout_constraintStart_toStartOf="@+id/toolbar"
+        app:layout_constraintEnd_toEndOf="parent"
         tools:layout_editor_absoluteY="0dp" />
 
     <TextView
@@ -72,9 +48,7 @@
         android:text="Группа"
         android:textColor="#FFFFFF"
         android:textSize="24sp"
-        app:layout_constraintEnd_toEndOf="@+id/toolbar"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/toolbar"
+        app:layout_constraintStart_toStartOf="parent"
         tools:layout_editor_absoluteY="0dp" />
 
     <Button
@@ -82,7 +56,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
-        android:layout_marginBottom="32dp"
+        android:layout_marginBottom="90dp"
         android:text="Следующий день"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
@@ -91,10 +65,22 @@
         android:id="@+id/buttonPrev"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginBottom="32dp"
+        android:layout_marginStart="28dp"
+        android:layout_marginBottom="90dp"
         android:text="Предыдущий день"
+        android:textColorHighlight="#FF0000"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/lessonNotFoundTextView"
+        android:layout_width="262dp"
+        android:layout_height="101dp"
+        android:gravity="center"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toBottomOf="@+id/swipe_refresh"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/swipe_refresh" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

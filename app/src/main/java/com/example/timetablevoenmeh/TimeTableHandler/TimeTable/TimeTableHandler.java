@@ -73,7 +73,7 @@ public class TimeTableHandler implements Serializable {
     }
 
 
-    public ArrayList<String> getTimeTable(String dayOfWeek, boolean isEven) {
+    public ArrayList<Lesson> getTimeTable(String dayOfWeek, boolean isEven) {
         if (myGroup!=null) {
             return myGroup.getTimeTable(dayOfWeek, isEven);
         }

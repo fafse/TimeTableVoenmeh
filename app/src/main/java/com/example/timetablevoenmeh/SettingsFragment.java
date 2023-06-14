@@ -1,18 +1,22 @@
 package com.example.timetablevoenmeh;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -33,22 +37,18 @@ public class SettingsFragment extends Fragment {
     private String TAG = "SETTINGSFRAGMENT";
     private TextView ErrorChangeGroupTextView;
 
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        groupNameAcceptButton = getView().findViewById(R.id.groupNameInputButton);
-        groupNameTextView = (EditText) getView().findViewById(R.id.groupNameInput);
-        ErrorChangeGroupTextView = getView().findViewById(R.id.ErrorChangeGroupTextView);
-    }
-
     private Button groupNameAcceptButton;
 
     public SettingsFragment() {
         // Required empty public constructor
     }
 
-    public interface PassMeLinkObject {
-
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        groupNameAcceptButton = getView().findViewById(R.id.groupNameInputButton);
+        groupNameTextView = (EditText) getView().findViewById(R.id.groupNameInput);
+        ErrorChangeGroupTextView = getView().findViewById(R.id.ErrorChangeGroupTextView);
     }
 
     @Override
@@ -86,7 +86,7 @@ public class SettingsFragment extends Fragment {
     private void handleGroupChange() {
         try {
             Log.i(TAG, "run: " + timeTableHandler.getGroupName());
-            if (timeTableHandler.setGroupName(groupNameTextView.getText().toString().replaceAll("\n",""))) {
+            if (timeTableHandler.setGroupName(groupNameTextView.getText().toString().replaceAll("\n", ""))) {
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -135,6 +135,7 @@ public class SettingsFragment extends Fragment {
         } else {
             Log.i(TAG, "onCreate: bundle NULL");
         }
+
     }
 
     @Override
