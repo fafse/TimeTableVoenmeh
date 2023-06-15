@@ -2,12 +2,15 @@ package com.example.timetablevoenmeh.TimeTableHandler.TimeTable;
 
 import android.util.Log;
 
+import androidx.annotation.NonNull;
+
 import java.io.Serializable;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
+import java.util.Objects;
 
 public class DateFormatter implements Serializable {
     private Calendar date;
@@ -21,7 +24,16 @@ public class DateFormatter implements Serializable {
 
     public void update() {
         date=Calendar.getInstance();
+    }
 
+    public int getInstanceDay()
+    {
+        return Calendar.getInstance().get(Calendar.DAY_OF_MONTH);
+    }
+
+    public static Calendar getInstance()
+    {
+        return Calendar.getInstance();
     }
     public String getCurrentDate()
     {
@@ -97,8 +109,54 @@ public class DateFormatter implements Serializable {
         }
         return result;
     }
+    public String getShortDayOfWeek() {
+        String result="";
+        switch (date.get(Calendar.DAY_OF_WEEK)) {
+            case 2:
+                result = "Пн";
+                break;
+            case 3:
+                result = "Вт";
+                break;
+            case 4:
+                result = "Ср";
+                break;
+            case 5:
+                result = "Чт";
+                break;
+            case 6:
+                result = "Пт";
+                break;
+            case 7:
+                result = "Сб";
+                break;
+            case 1:
+                result = "Вс";
+                break;
+        }
+        return result;
+    }
+
+    public Object clone()
+    {
+        Calendar newCalendar= (Calendar) date.clone();
+        DateFormatter dateFormatter= new DateFormatter();
+        dateFormatter.setCalendar(newCalendar);
+        return dateFormatter;
+    }
+
+    public void setCalendar(Calendar calendar)
+    {
+        date=calendar;
+    }
+
+    public int getNumOfDay()
+    {
+        return date.get(Calendar.DAY_OF_MONTH);
+    }
 
     public void addDays(int numOfDays) {
         date.add(Calendar.DATE,numOfDays);
     }
+
 }

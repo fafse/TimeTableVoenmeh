@@ -44,7 +44,6 @@ public class CustomAdapter extends BaseAdapter {
     }
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        Log.i(TAG, "CustomAdapter: HERE");
         Lesson lesson= getItem(position);
         // TODO Auto-generated method stub
         if (convertView == null) {
@@ -52,16 +51,12 @@ public class CustomAdapter extends BaseAdapter {
         }
         TextView lessonNumberTextView = convertView.findViewById(R.id.lessonNumberTextView);
         lessonNumberTextView.setText(lesson.getLessonNum());
-        Log.i(TAG, "lessonNumberTextView: "+lessonNumberTextView.getText());
         TextView timeLessonTextView = convertView.findViewById(R.id.timeLessonTextView);
         timeLessonTextView.setText(lesson.getCurrentTime()+"-"+lesson.getTime(1,30));
-        Log.i(TAG, "timeLessonTextView: "+timeLessonTextView.getText());
         TextView lessonNameTextView = convertView.findViewById(R.id.lessonNameTextView);
         lessonNameTextView.setText(lesson.getLessonName());
-        Log.i(TAG, "lessonNameTextView: "+lessonNameTextView.getText());
         TextView typeLessonTextView = convertView.findViewById(R.id.typeLessonTextView);
         typeLessonTextView.setText(lesson.getlessonType());
-        Log.i(TAG, "typeLessonTextView: "+typeLessonTextView.getText());
         TextView teacherNameTextView = convertView.findViewById(R.id.teacherNameTextView);
         teacherNameTextView.setText(lesson.getTeacherName());
         TextView cabinetNameTextView = convertView.findViewById(R.id.cabinetNameTextView);

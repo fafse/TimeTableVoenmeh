@@ -10,8 +10,9 @@
 
     <style name = "com.example.timetablevoenmeh.TimeTableHandler.SplashScreen" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <item name="android:windowBackground">@drawable/background_splashscreen</item>
-        <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimary</item>
+        <item name="android:statusBarColor" tools:targetApi="l">@color/primary_color</item>
         <item name="android:windowIsTranslucent">true</item>
+        <item name="colorPrimary">@color/primary_color</item>
     </style>
 
 

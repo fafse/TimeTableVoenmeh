@@ -14,7 +14,7 @@
         android:layout_height="64dp"
         android:gravity="center"
         android:text="Настройки"
-        android:textColor="@color/white"
+        android:textColor="@color/black"
         android:textSize="24sp"
         app:layout_constraintTop_toTopOf="parent"
         tools:layout_editor_absoluteX="-1dp" />

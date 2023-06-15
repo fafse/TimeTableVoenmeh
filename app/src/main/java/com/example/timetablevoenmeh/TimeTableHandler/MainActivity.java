@@ -6,6 +6,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.Settings;
+import android.util.Log;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -93,11 +94,18 @@ public class MainActivity extends AppCompatActivity {
     private void replaceFragment(Fragment fragment, Bundle bundle) {
         do {
         }while(timeTableHandler==null);
+        String currentFragmentTmp=currentFragment;
+        boolean flag=true;
         DateFormatter tmpData = homeFragment.getDateFormatter();
         TimeTableHandler tmpTimeTable=null;
         if(fragment instanceof HomeFragment) {
             tmpTimeTable = homeFragment.getTimeTableHandler();
             currentFragment="HomeFragment";
+            if(currentFragmentTmp!=null&& currentFragmentTmp.equals(currentFragment)) {
+                dateFormatter.update();
+                Log.i("MAINACTIVITY", "replaceFragment: change DATE");
+                flag=false;
+            }
         }
         else {
             tmpTimeTable = settingsFragment.getTimeTableHandler();
@@ -106,7 +114,7 @@ public class MainActivity extends AppCompatActivity {
 
         if(tmpData!=null)
         {
-            if (!tmpData.equals(dateFormatter))
+            if (!tmpData.equals(dateFormatter)&&flag)
             {
                 dateFormatter=tmpData;
             }
@@ -123,6 +131,11 @@ public class MainActivity extends AppCompatActivity {
         fragment.setArguments(bundle);
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.setCustomAnimations(R.anim.slide_in_right,
+                R.anim.slide_out_left,
+                R.anim.slide_in_left,
+                R.anim.slide_out_right
+        );
         fragmentTransaction.replace(R.id.fragmentContainerView, fragment);
         fragmentTransaction.commit();
 
@@ -139,6 +152,5 @@ public class MainActivity extends AppCompatActivity {
         }
         super.onSaveInstanceState(outState);
     }
-
 
 }
