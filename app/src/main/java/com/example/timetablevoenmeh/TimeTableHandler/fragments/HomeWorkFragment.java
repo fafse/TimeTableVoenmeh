@@ -1,4 +1,4 @@
-package com.example.timetablevoenmeh;
+package com.example.timetablevoenmeh.TimeTableHandler.fragments;
 
 import android.app.Activity;
 import android.content.Context;
@@ -12,6 +12,7 @@ import android.widget.ListView;
 import androidx.fragment.app.Fragment;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import com.example.timetablevoenmeh.R;
 import com.example.timetablevoenmeh.TimeTableHandler.TimeTable.HomeWork;
 import com.example.timetablevoenmeh.TimeTableHandler.TimeTable.customListVIew.HomeWorkCustomAdapter;
 import com.example.timetablevoenmeh.TimeTableHandler.TimeTable.customListVIew.HomeWorksHandler;
@@ -56,7 +57,7 @@ public class HomeWorkFragment extends Fragment {
 
     private void fillList() {
         if (lessons != null && lessons.size() > 0) {
-            HomeWorkCustomAdapter adapter = new HomeWorkCustomAdapter(context, lessons);
+            HomeWorkCustomAdapter adapter = new HomeWorkCustomAdapter(context,homeWorksHandler);
             activity.runOnUiThread(new Runnable() {
                 @Override
                 public void run() {

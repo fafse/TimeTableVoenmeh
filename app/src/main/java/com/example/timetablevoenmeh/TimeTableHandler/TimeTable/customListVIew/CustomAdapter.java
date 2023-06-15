@@ -8,7 +8,7 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.example.timetablevoenmeh.R;
-import com.example.timetablevoenmeh.TimeTableHandler.TimeTable.Lesson;
+import com.example.timetablevoenmeh.TimeTableHandler.TimeTable.Parsing.Lesson;
 
 import java.util.ArrayList;
 

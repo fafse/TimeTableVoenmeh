@@ -9,12 +9,12 @@
 
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="125dp">
+        android:layout_height="158dp">
 
         <LinearLayout
             android:id="@+id/deadLineTextView"
             android:layout_width="match_parent"
-            android:layout_height="152dp"
+            android:layout_height="156dp"
             android:orientation="vertical">
 
             <LinearLayout
@@ -31,6 +31,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:gravity="center"
+                        android:text="1"
                         android:textStyle="bold" />
 
                 </FrameLayout>
@@ -67,10 +68,12 @@
                     android:id="@+id/removeButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="4dp"
-                    android:layout_marginEnd="4dp"
+                    android:layout_marginEnd="10dp"
                     android:layout_weight="1"
+                    android:backgroundTint="#F62B2B"
                     android:text="Удалить"
+                    android:textColorHighlight="@android:color/transparent"
+                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
             </androidx.constraintlayout.widget.ConstraintLayout>
@@ -82,16 +85,16 @@
                 android:text="описание"
                 android:textColor="#AFAFAF" />
 
+            <TextView
+                android:id="@+id/typeTextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center|left"
+                android:text="TextView"
+                android:textColor="#AFAFAF" />
+
         </LinearLayout>
 
     </FrameLayout>
-
-    <TextView
-        android:id="@+id/typeTextView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center|left"
-        android:text="TextView"
-        android:textColor="#AFAFAF" />
 
 </LinearLayout>

@@ -1,16 +1,9 @@
-package com.example.timetablevoenmeh.TimeTableHandler.TimeTable;
+package com.example.timetablevoenmeh.TimeTableHandler.TimeTable.formatters;
 
 import android.util.Log;
 
-import androidx.annotation.NonNull;
-
 import java.io.Serializable;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
-import java.util.Locale;
-import java.util.Objects;
 
 public class DateFormatter implements Serializable {
     private Calendar date;

@@ -5,7 +5,7 @@
     android:id="@+id/homeWork"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".HomeWorkFragment">
+    tools:context=".TimeTableHandler.fragments.HomeWorkFragment">
 
     <TextView
         android:id="@+id/textView2"
@@ -22,6 +22,7 @@
         android:layout_width="54dp"
         android:layout_height="56dp"
         android:layout_marginEnd="1dp"
+        android:backgroundTint="@color/primary_color"
         android:text="+"
         android:textSize="14sp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -29,9 +30,12 @@
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/HomeWorkList"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="64dp"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="65dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
         <ListView

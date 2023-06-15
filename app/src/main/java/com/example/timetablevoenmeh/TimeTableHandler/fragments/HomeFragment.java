@@ -1,4 +1,4 @@
-package com.example.timetablevoenmeh;
+package com.example.timetablevoenmeh.TimeTableHandler.fragments;
 
 import android.app.Activity;
 import android.content.Context;
@@ -17,10 +17,11 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentContainerView;
 
-import com.example.timetablevoenmeh.TimeTableHandler.TimeTable.DateFormatter;
-import com.example.timetablevoenmeh.TimeTableHandler.TimeTable.Lesson;
-import com.example.timetablevoenmeh.TimeTableHandler.TimeTable.TimeTableHandler;
+import com.example.timetablevoenmeh.R;
+import com.example.timetablevoenmeh.TimeTableHandler.TimeTable.Parsing.Lesson;
+import com.example.timetablevoenmeh.TimeTableHandler.TimeTable.Parsing.TimeTableHandler;
 import com.example.timetablevoenmeh.TimeTableHandler.TimeTable.customListVIew.CustomAdapter;
+import com.example.timetablevoenmeh.TimeTableHandler.TimeTable.formatters.DateFormatter;
 
 import java.util.ArrayList;
 
@@ -39,7 +40,6 @@ public class HomeFragment extends Fragment {
     private View view;
     private Context context;
     private Activity activity;
-    private ArrayList<FragmentContainerView> dateFragmentsContainers;
     private ArrayList<Fragment> dates;
     private ArrayList<Bundle> bundles;
     private int numOfDays=7;

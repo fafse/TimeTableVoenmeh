@@ -1,4 +1,4 @@
-package com.example.timetablevoenmeh.TimeTableHandler.TimeTable;
+package com.example.timetablevoenmeh.TimeTableHandler.TimeTable.Parsing;
 
 import java.io.FileOutputStream;
 import java.io.Serializable;

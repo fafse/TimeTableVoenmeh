@@ -1,9 +1,8 @@
-package com.example.timetablevoenmeh.TimeTableHandler.TimeTable;
+package com.example.timetablevoenmeh.TimeTableHandler.TimeTable.Parsing;
 
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 public class Group implements Serializable {

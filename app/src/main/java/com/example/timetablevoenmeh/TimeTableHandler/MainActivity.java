@@ -14,16 +14,15 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
-import com.example.timetablevoenmeh.HomeFragment;
-import com.example.timetablevoenmeh.HomeWorkFragment;
+import com.example.timetablevoenmeh.TimeTableHandler.fragments.HomeFragment;
+import com.example.timetablevoenmeh.TimeTableHandler.fragments.HomeWorkFragment;
 import com.example.timetablevoenmeh.R;
-import com.example.timetablevoenmeh.SettingsFragment;
-import com.example.timetablevoenmeh.TimeTableHandler.TimeTable.DateFormatter;
-import com.example.timetablevoenmeh.TimeTableHandler.TimeTable.TimeTableHandler;
+import com.example.timetablevoenmeh.TimeTableHandler.fragments.SettingsFragment;
+import com.example.timetablevoenmeh.TimeTableHandler.TimeTable.formatters.DateFormatter;
+import com.example.timetablevoenmeh.TimeTableHandler.TimeTable.Parsing.TimeTableHandler;
 import com.example.timetablevoenmeh.databinding.ActivityMainBinding;
 
 import java.util.Objects;
-import java.util.Set;
 
 public class MainActivity extends AppCompatActivity {
 

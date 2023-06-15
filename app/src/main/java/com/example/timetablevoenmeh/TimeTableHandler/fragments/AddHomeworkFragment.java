@@ -1,4 +1,4 @@
-package com.example.timetablevoenmeh;
+package com.example.timetablevoenmeh.TimeTableHandler.fragments;
 
 import android.app.Activity;
 import android.content.Context;
@@ -14,7 +14,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.example.timetablevoenmeh.TimeTableHandler.TimeTable.FileWorker;
+import com.example.timetablevoenmeh.R;
+import com.example.timetablevoenmeh.TimeTableHandler.TimeTable.formatters.FileWorker;
 import com.example.timetablevoenmeh.TimeTableHandler.TimeTable.HomeWork;
 import com.example.timetablevoenmeh.TimeTableHandler.TimeTable.customListVIew.HomeWorksHandler;
 
@@ -51,7 +52,7 @@ public class AddHomeworkFragment extends Fragment {
             public void onClick(View v) {
                 ArrayList<HomeWork> tmp=fileWorker.readHomeWorks();
                 if(tmp==null)
-                tmp=new ArrayList<>();
+                    tmp=new ArrayList<>();
                 String type = typeNameInput.getText().toString();
                 String lessonName = lessonNameInput.getText().toString();
                 String date = dateInput.getText().toString();

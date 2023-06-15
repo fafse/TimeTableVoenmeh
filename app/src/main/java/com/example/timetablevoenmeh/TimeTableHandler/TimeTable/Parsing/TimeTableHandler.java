@@ -1,7 +1,9 @@
-package com.example.timetablevoenmeh.TimeTableHandler.TimeTable;
+package com.example.timetablevoenmeh.TimeTableHandler.TimeTable.Parsing;
 
 
 import android.util.Log;
+
+import com.example.timetablevoenmeh.TimeTableHandler.TimeTable.formatters.FileWorker;
 
 import java.io.IOException;
 import java.io.Serializable;

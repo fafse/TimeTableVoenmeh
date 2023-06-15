@@ -1,10 +1,6 @@
-package com.example.timetablevoenmeh.TimeTableHandler.TimeTable;
+package com.example.timetablevoenmeh.TimeTableHandler.TimeTable.Parsing;
 
 import java.io.Serializable;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 
 public class Lesson  implements Serializable {

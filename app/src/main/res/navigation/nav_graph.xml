@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/homeFragment"
-        android:name="com.example.timetablevoenmeh.HomeFragment"
+        android:name="com.example.timetablevoenmeh.TimeTableHandler.fragments.HomeFragment"
         android:label="fragment_home"
         tools:layout="@layout/fragment_home" >
         <action
@@ -23,7 +23,7 @@
     </fragment>
     <fragment
         android:id="@+id/settingsFragment"
-        android:name="com.example.timetablevoenmeh.SettingsFragment"
+        android:name="com.example.timetablevoenmeh.TimeTableHandler.fragments.SettingsFragment"
         android:label="fragment_settings"
         tools:layout="@layout/fragment_settings" />
 </navigation>

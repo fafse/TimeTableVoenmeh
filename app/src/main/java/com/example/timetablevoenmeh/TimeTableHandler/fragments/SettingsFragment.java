@@ -1,27 +1,24 @@
-package com.example.timetablevoenmeh;
+package com.example.timetablevoenmeh.TimeTableHandler.fragments;
 
-import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.CompoundButton;
 import android.widget.EditText;
-import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.timetablevoenmeh.TimeTableHandler.TimeTable.DateFormatter;
-import com.example.timetablevoenmeh.TimeTableHandler.TimeTable.TimeTableHandler;
+import com.example.timetablevoenmeh.R;
+import com.example.timetablevoenmeh.TimeTableHandler.TimeTable.formatters.DateFormatter;
+import com.example.timetablevoenmeh.TimeTableHandler.TimeTable.Parsing.TimeTableHandler;
 
 import java.io.IOException;
 

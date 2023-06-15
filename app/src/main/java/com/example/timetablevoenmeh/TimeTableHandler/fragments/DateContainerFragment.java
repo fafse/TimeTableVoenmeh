@@ -1,7 +1,6 @@
-package com.example.timetablevoenmeh;
+package com.example.timetablevoenmeh.TimeTableHandler.fragments;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,7 +10,8 @@ import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
 
-import com.example.timetablevoenmeh.TimeTableHandler.TimeTable.DateFormatter;
+import com.example.timetablevoenmeh.R;
+import com.example.timetablevoenmeh.TimeTableHandler.TimeTable.formatters.DateFormatter;
 
 
 public class DateContainerFragment extends Fragment {

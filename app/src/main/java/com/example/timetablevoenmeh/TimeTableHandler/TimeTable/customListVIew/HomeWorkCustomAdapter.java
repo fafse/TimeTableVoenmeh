@@ -6,9 +6,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.TextView;
 
-import com.example.timetablevoenmeh.HomeWorkFragment;
 import com.example.timetablevoenmeh.R;
 import com.example.timetablevoenmeh.TimeTableHandler.TimeTable.HomeWork;
 
@@ -16,13 +16,14 @@ import java.util.ArrayList;
 
 public class HomeWorkCustomAdapter extends BaseAdapter {
     private static LayoutInflater inflater = null;
+    private HomeWorksHandler homeWorksHandler;
     private ArrayList<HomeWork> lessons;
     private String TAG="CUSTOMADAPTER";
-    private int counterHomeWorks=1;
 
 
-    public HomeWorkCustomAdapter(Context context, ArrayList<HomeWork> lessons) {
-        this.lessons=lessons;
+    public HomeWorkCustomAdapter(Context context, HomeWorksHandler homeWorksHandler) {
+        this.homeWorksHandler=homeWorksHandler;
+        this.lessons=homeWorksHandler.getHomeWorks();
         inflater = (LayoutInflater) context
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
@@ -43,6 +44,7 @@ public class HomeWorkCustomAdapter extends BaseAdapter {
         // TODO Auto-generated method stub
         return position;
     }
+
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         HomeWork lesson= getItem(position);
@@ -61,8 +63,18 @@ public class HomeWorkCustomAdapter extends BaseAdapter {
         descriptionTextView.setText(lesson.getDescription());
         TextView typeTextView = convertView.findViewById(R.id.typeTextView);
         typeTextView.setText(lesson.getType());
+        Button removeItem = convertView.findViewById(R.id.removeButton);
+        removeItem.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                homeWorksHandler.removeHomeWork(lesson);
+                homeWorksHandler.SaveHomeWorks();
+                notifyDataSetChanged();
 
+            }
+        });
 
         return convertView;
     }
+
 }

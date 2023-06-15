@@ -1,6 +1,6 @@
 package com.example.timetablevoenmeh.TimeTableHandler.TimeTable.customListVIew;
 
-import com.example.timetablevoenmeh.TimeTableHandler.TimeTable.FileWorker;
+import com.example.timetablevoenmeh.TimeTableHandler.TimeTable.formatters.FileWorker;
 import com.example.timetablevoenmeh.TimeTableHandler.TimeTable.HomeWork;
 
 import java.util.ArrayList;
@@ -18,13 +18,21 @@ public class HomeWorksHandler {
         }
     }
 
+    public void SaveHomeWorks()
+    {
+        fileWorker.saveHomeWorks(homeWorks);
+    }
+
+
     public ArrayList<HomeWork> getHomeWorks() {
         return homeWorks;
     }
 
-    public void addHomeWork(HomeWork homeWork) {
-        if (homeWork != null) {
-            homeWorks.add(homeWork);
+    public void removeHomeWork(HomeWork homeWork)
+    {
+        if(homeWorks.contains(homeWork))
+        {
+            homeWorks.remove(homeWork);
         }
     }
 }
