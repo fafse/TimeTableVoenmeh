@@ -15,6 +15,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.example.timetablevoenmeh.HomeFragment;
+import com.example.timetablevoenmeh.HomeWorkFragment;
 import com.example.timetablevoenmeh.R;
 import com.example.timetablevoenmeh.SettingsFragment;
 import com.example.timetablevoenmeh.TimeTableHandler.TimeTable.DateFormatter;
@@ -22,6 +23,7 @@ import com.example.timetablevoenmeh.TimeTableHandler.TimeTable.TimeTableHandler;
 import com.example.timetablevoenmeh.databinding.ActivityMainBinding;
 
 import java.util.Objects;
+import java.util.Set;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -35,6 +37,7 @@ public class MainActivity extends AppCompatActivity {
 
     private HomeFragment homeFragment=new HomeFragment();
     private SettingsFragment settingsFragment =new SettingsFragment();
+    private HomeWorkFragment homeWorkFragment=new HomeWorkFragment();
     private String currentFragment;
 
     @SuppressLint("NonConstantResourceId")
@@ -72,12 +75,16 @@ public class MainActivity extends AppCompatActivity {
             replaceFragment(homeFragment, bundle);
         else if (currentFragment.equals("SettingsFragment")) {
             replaceFragment(settingsFragment,bundle);
+        } else if (currentFragment.equals("HomeWorkFragment")) {
+            replaceFragment(homeWorkFragment,bundle);
         }
         binding.bottomNavigationView.setOnItemSelectedListener(item -> {
             if (item.getItemId() == R.id.home) {
                 replaceFragment(homeFragment, bundle);
             } else if (item.getItemId() == R.id.settings) {
                 replaceFragment(settingsFragment, bundle);
+            }else if (item.getItemId() == R.id.homeWork) {
+                replaceFragment(homeWorkFragment, bundle);
             }
 
             return true;
@@ -107,11 +114,13 @@ public class MainActivity extends AppCompatActivity {
                 flag=false;
             }
         }
-        else {
+        else if(fragment instanceof SettingsFragment){
             tmpTimeTable = settingsFragment.getTimeTableHandler();
             currentFragment="SettingsFragment";
         }
-
+        else if(fragment instanceof HomeWorkFragment){
+            currentFragment="HomeWorkFragment";
+        }
         if(tmpData!=null)
         {
             if (!tmpData.equals(dateFormatter)&&flag)
@@ -149,6 +158,8 @@ public class MainActivity extends AppCompatActivity {
             outState.putString("FRAGMENT","HomeFragment");
         } else if (Objects.equals(currentFragment, "SettingsFragment")) {
             outState.putString("FRAGMENT","SettingsFragment");
+        } else if (Objects.equals(currentFragment,"HomeWorkFragment")) {
+            outState.putString("FRAGMENT","HomeWorkFragment");
         }
         super.onSaveInstanceState(outState);
     }

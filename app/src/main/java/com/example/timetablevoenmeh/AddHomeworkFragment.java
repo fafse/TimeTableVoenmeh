@@ -1,64 +1,131 @@
 package com.example.timetablevoenmeh;
 
+import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Toast;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link AddHomeworkFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
+import com.example.timetablevoenmeh.TimeTableHandler.TimeTable.FileWorker;
+import com.example.timetablevoenmeh.TimeTableHandler.TimeTable.HomeWork;
+import com.example.timetablevoenmeh.TimeTableHandler.TimeTable.customListVIew.HomeWorksHandler;
+
+import java.util.ArrayList;
+
 public class AddHomeworkFragment extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
+    private Context context;
+    private Activity activity;
+    private View view;
+    private HomeWorksHandler homeWorksHandler;
+    private Button resetButton, submitButton;
+    private FileWorker fileWorker;
+    private EditText homeWorkInput,lessonNameInput,typeNameInput,descriptionInput,dateInput;
     public AddHomeworkFragment() {
         // Required empty public constructor
     }
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment AddHomeworkFragment.
-     */
-    // TODO: Rename and change types and number of parameters
     public static AddHomeworkFragment newInstance(String param1, String param2) {
         AddHomeworkFragment fragment = new AddHomeworkFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
+
         return fragment;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
+
+    }
+
+    @Override
+    public void onStart() {
+        submitButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ArrayList<HomeWork> tmp=fileWorker.readHomeWorks();
+                if(tmp==null)
+                tmp=new ArrayList<>();
+                String type = typeNameInput.getText().toString();
+                String lessonName = lessonNameInput.getText().toString();
+                String date = dateInput.getText().toString();
+                String description = descriptionInput.getText().toString();
+                String homeWork = homeWorkInput.getText().toString();
+
+                if(type!=null&&
+                        lessonName!=null&&
+                        date!=null&&
+                        description!=null&&
+                        homeWork!=null&&
+                        !type.equals("") &&
+                        !lessonName.equals("") &&
+                        !date.equals("") &&
+                        !description.equals("") &&
+                        !homeWork.equals("")
+                ) {
+                    Log.i("ADDHOMEWORKFRAGMENTS", "onClick: "+tmp.size());
+                    tmp.add(new HomeWork(
+                            type,
+                            lessonName,
+                            date,
+                            description,
+                            homeWork
+                    ));
+                    fileWorker.saveHomeWorks(tmp);
+                    Toast.makeText(context,"Домашнее задание добавлено",Toast.LENGTH_SHORT).show();
+                    HomeWorkFragment nextFragment = new HomeWorkFragment();
+                    getActivity().getSupportFragmentManager().beginTransaction()
+                            .setCustomAnimations(R.anim.home_fragment_right_to_left,
+                                    R.anim.home_fragment_exit_right_to_left,
+                                    R.anim.home_fragment_left_to_right,
+                                    R.anim.home_fragment_exit_left_to_right
+                            )
+                            .replace(R.id.fragmentContainerView, nextFragment).commit();
+                    homeWorkInput.setText("");
+                    lessonNameInput.setText("");
+                    typeNameInput.setText("");
+                    descriptionInput.setText("");
+                    dateInput.setText("");
+                }else
+                {
+                    Toast.makeText(context,"Все поля должны быть заполнены",Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+        resetButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                homeWorkInput.setText("");
+                lessonNameInput.setText("");
+                typeNameInput.setText("");
+                descriptionInput.setText("");
+                dateInput.setText("");
+            }
+        });
+        super.onStart();
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_add_homework, container, false);
+        context=getContext();
+        view=inflater.inflate(R.layout.fragment_add_homework, container, false);
+        homeWorkInput=view.findViewById(R.id.homeWorkInput);
+        lessonNameInput=view.findViewById(R.id.lessonNameInput);
+        typeNameInput=view.findViewById(R.id.typeNameInput);
+        descriptionInput=view.findViewById(R.id.descriptionInput);
+        resetButton=view.findViewById(R.id.resetButton);
+        dateInput=view.findViewById(R.id.dateInput);
+        fileWorker= new FileWorker("Homework.txt");
+
+        submitButton=view.findViewById(R.id.submitButton);
+
+        return view;
     }
 }

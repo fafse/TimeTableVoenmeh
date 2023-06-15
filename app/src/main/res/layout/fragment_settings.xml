@@ -14,35 +14,14 @@
         android:layout_height="64dp"
         android:gravity="center"
         android:text="Настройки"
-        android:textColor="@color/black"
         android:textSize="24sp"
         app:layout_constraintTop_toTopOf="parent"
         tools:layout_editor_absoluteX="-1dp" />
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/textInputLayout"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:boxBackgroundColor="#FFFFFF"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
-
-    </com.google.android.material.textfield.TextInputLayout>
-
-    <Button
-        android:id="@+id/groupNameInputButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="16dp"
-        android:text="Найти"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/settingsToolBarText" />
-
     <TextView
         android:id="@+id/ErrorChangeGroupTextView"
-        android:layout_width="411dp"
-        android:layout_height="74dp"
+        android:layout_width="0dp"
+        android:layout_height="68dp"
         android:gravity="center"
         android:text="Проверьте правильность ввода имени группы или соедниение с интернетом"
         android:textColor="#FF0000"
@@ -50,22 +29,31 @@
         android:textSize="20sp"
         android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/groupNameInput"
+        tools:visibility="visible" />
 
     <EditText
         android:id="@+id/groupNameInput"
-        android:layout_width="232dp"
+        android:layout_width="wrap_content"
         android:layout_height="45dp"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="80dp"
+        android:layout_marginTop="9dp"
         android:ems="10"
         android:hint="Введите номер группы"
         android:inputType="text"
-        app:layout_constraintEnd_toStartOf="@+id/groupNameInputButton"
-        app:layout_constraintHorizontal_bias="0.409"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/settingsToolBarText" />
+
+    <Button
+        android:id="@+id/groupNameInputButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="9dp"
+        android:layout_marginEnd="16dp"
+        android:gravity="right"
+        android:text="Найти"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/settingsToolBarText" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

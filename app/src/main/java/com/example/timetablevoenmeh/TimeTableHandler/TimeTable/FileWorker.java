@@ -13,6 +13,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutput;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
+import java.util.ArrayList;
 
 public class FileWorker  implements Serializable {
     private String fileName;
@@ -141,5 +142,58 @@ public class FileWorker  implements Serializable {
             }
         }
         return group;
+    }
+    public void saveHomeWorks(ArrayList<HomeWork> homeWorks) {
+        if (homeWorks == null||homeWorks.size()==0) return;
+        FileOutputStream fos = null;
+        ObjectOutputStream os = null;
+        try {
+            fos = new FileOutputStream(path);
+            os = new ObjectOutputStream(fos);
+            os.writeObject(homeWorks);
+        } catch (IOException ex) {
+            Log.d("EXCEPTION", "FILEWORKEREXCEPTION: " + ex.getMessage());
+            Log.d("EXCEPTION SAVING", "saveGroup: " + ex);
+        } finally {
+            try {
+                if (os != null)
+                    os.close();
+                if (fos != null)
+                    fos.close();
+            } catch (IOException ex) {
+                Log.d("EXCEPTION", "FILEWORKEREXCEPTION: " + ex.getMessage());
+            }
+        }
+    }
+
+    // открытие файла
+    public ArrayList<HomeWork> readHomeWorks() {
+
+        FileInputStream fin = null;
+        ObjectInput is = null;
+        ArrayList<HomeWork> homeWorks = null;
+        try {
+            fin = new FileInputStream(path);
+            is = new ObjectInputStream(fin);
+            homeWorks = (ArrayList<HomeWork>) is.readObject();
+        } catch (IOException ex) {
+
+            Log.d("EXCEPTION", "FILEWORKEREXCEPTION writing file: " + ex.getMessage());
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        } finally {
+
+            try {
+                if (is != null)
+                    is.close();
+                if (fin != null)
+                    fin.close();
+
+            } catch (IOException ex) {
+
+                Log.d("EXCEPTION", "FILEWORKEREXCEPTION reading file: " + ex.getMessage());
+            }
+        }
+        return homeWorks;
     }
 }

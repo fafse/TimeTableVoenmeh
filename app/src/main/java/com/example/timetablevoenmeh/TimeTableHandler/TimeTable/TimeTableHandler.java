@@ -1,22 +1,11 @@
 package com.example.timetablevoenmeh.TimeTableHandler.TimeTable;
 
 
-import android.icu.util.LocaleData;
 import android.util.Log;
-import android.widget.Toast;
-
-import com.example.timetablevoenmeh.TimeTableHandler.MainActivity;
 
 import java.io.IOException;
 import java.io.Serializable;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.time.DayOfWeek;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
-import java.util.Locale;
 
 public class TimeTableHandler implements Serializable {
     private Group myGroup = null;
@@ -99,6 +88,11 @@ public class TimeTableHandler implements Serializable {
             }
         }
         return false;
+    }
+
+    public ArrayList<String> getGroupLessonsNames()
+    {
+        return myGroup.getLessonNames();
     }
 
     public String getGroupName() {

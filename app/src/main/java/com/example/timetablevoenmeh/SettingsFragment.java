@@ -28,9 +28,6 @@ import java.io.IOException;
 public class SettingsFragment extends Fragment {
 
 
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
     private TimeTableHandler timeTableHandler;
     private DateFormatter dateFormatter;
     private EditText groupNameTextView;
