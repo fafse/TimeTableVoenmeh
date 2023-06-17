@@ -4,10 +4,11 @@
     <item android:title="Расписание"
         android:icon="@drawable/home"
         android:id="@+id/home"/>
+    <item android:title="Поиск группы"
+        android:icon="@drawable/search"
+        android:id="@+id/settings"/>
     <item android:title="Домашнее задание"
         android:icon="@drawable/home_work_vector"
         android:id="@+id/homeWork"/>
-    <item android:title="Настройки"
-        android:icon="@drawable/settings"
-        android:id="@+id/settings"/>
+
 </menu>

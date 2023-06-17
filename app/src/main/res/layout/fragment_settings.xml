@@ -13,7 +13,7 @@
         android:layout_width="match_parent"
         android:layout_height="64dp"
         android:gravity="center"
-        android:text="Настройки"
+        android:text="Выбор группы"
         android:textSize="24sp"
         app:layout_constraintTop_toTopOf="parent"
         tools:layout_editor_absoluteX="-1dp" />
@@ -51,6 +51,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="9dp"
         android:layout_marginEnd="16dp"
+        android:backgroundTint="@color/primary_color"
         android:gravity="right"
         android:text="Найти"
         app:layout_constraintEnd_toEndOf="parent"
