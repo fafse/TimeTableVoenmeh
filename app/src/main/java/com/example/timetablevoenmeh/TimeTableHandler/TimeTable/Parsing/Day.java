@@ -8,7 +8,6 @@ import java.util.List;
 public class Day implements Serializable {
     private String name;
     private List<Lesson> lessons;
-    private final static String FILE_NAME = "content.txt";
     public Day(String day){
         FileOutputStream fos = null;
         day.replaceAll("\\t","\\n");
@@ -43,17 +42,6 @@ public class Day implements Serializable {
         Lesson parsedLesson = Lesson.getLesson(lesson);
         if(parsedLesson!=null)
             lessons.add(parsedLesson);
-    }
-    public String printDay(boolean isEven)
-    {
-        String result="";
-        for (Lesson lesson:
-             lessons) {
-            if(lesson.isEven()==isEven) {
-                result+= lesson+"\n";
-            }
-        }
-        return result;
     }
 
     public List<Lesson> getLessons(boolean isEven)

@@ -50,24 +50,6 @@ public class Group implements Serializable {
         }
         return result;
     }
-    public ArrayList<String> getLessonNames()
-    {
-        ArrayList<String> result= new ArrayList<>();
-        for (int i = 0;i< days.size();i++)
-        {
-            for(Lesson lesson: days.get(i).getLessons(true))
-            {
-                if(!result.contains(lesson.getLessonName()))
-                    result.add(lesson.getLessonName());
-            }
-            for(Lesson lesson: days.get(i).getLessons(false))
-            {
-                if(!result.contains(lesson.getLessonName()))
-                    result.add(lesson.getLessonName());
-            }
-        }
-        return result;
-    }
 
     public String getName()
     {

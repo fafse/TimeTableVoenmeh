@@ -34,13 +34,6 @@ public class HomeWorkFragment extends Fragment {
         // Required empty public constructor
     }
 
-    public static HomeWorkFragment newInstance() {
-        HomeWorkFragment fragment = new HomeWorkFragment();
-        Bundle args = new Bundle();
-        fragment.setArguments(args);
-        return fragment;
-    }
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

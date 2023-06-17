@@ -19,15 +19,7 @@ public class DateFormatter implements Serializable {
         date=Calendar.getInstance();
     }
 
-    public int getInstanceDay()
-    {
-        return Calendar.getInstance().get(Calendar.DAY_OF_MONTH);
-    }
 
-    public static Calendar getInstance()
-    {
-        return Calendar.getInstance();
-    }
     public String getCurrentDate()
     {
         String currentDate = "";

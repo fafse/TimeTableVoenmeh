@@ -92,11 +92,6 @@ public class TimeTableHandler implements Serializable {
         return false;
     }
 
-    public ArrayList<String> getGroupLessonsNames()
-    {
-        return myGroup.getLessonNames();
-    }
-
     public String getGroupName() {
         return groupName;
     }
