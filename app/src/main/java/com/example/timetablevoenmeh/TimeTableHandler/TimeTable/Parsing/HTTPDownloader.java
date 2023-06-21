@@ -59,9 +59,9 @@ public class HTTPDownloader implements Serializable {
                 }
             }
         } catch (MalformedURLException e) {
-            throw new RuntimeException(e);
+            prefix=32;
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            prefix=32;
         }
         return prefix;
     }
