@@ -1,15 +1,24 @@
 package com.example.timetablevoenmeh.TimeTableHandler.TimeTable.Parsing;
 
 
+
+import android.app.DownloadManager;
+import android.net.Uri;
 import android.util.Log;
+
+import com.example.timetablevoenmeh.TimeTableHandler.TimeTable.formatters.FileWorker;
+import com.google.firebase.crashlytics.buildtools.reloc.com.google.common.base.Utf8;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Serializable;
+import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -20,6 +29,7 @@ import javax.net.ssl.HttpsURLConnection;
 
 public class HTTPDownloader implements Serializable {
     private String defaultUrl = "https://www.voenmeh.ru/templates/jd_atlanta/js/TimetableGroup";
+    
     private Group myGroup;
 
     private String groupName="О719Б";
@@ -46,8 +56,6 @@ public class HTTPDownloader implements Serializable {
                 xmlResult.append(line + "\n");
             }
             Log.i(TAG, "findUrl: GOR BODY");
-
-
             String[] lines = xmlResult.toString().split("\n");
             for(String l:lines)
             {
@@ -79,15 +87,15 @@ public class HTTPDownloader implements Serializable {
             URL url = new URL(defaultUrl);
             connection = (HttpsURLConnection) url.openConnection();
             stream = connection.getInputStream();
-            reader = new BufferedReader(new InputStreamReader(stream));
+            reader = new BufferedReader(new InputStreamReader(stream, StandardCharsets.UTF_16));
             Log.i(TAG, "Download: CONNECTED");
             String line;
             while ((line = reader.readLine()) != null) {
                 xmlResult.append(line + "\n");
             }
-            Log.i(TAG, "Download: GOR BODY");
+            Log.i(TAG, "Download: GOT BODY");
+            Log.i(TAG, "Download: "+xmlResult);
             String body = xmlResult.toString();
-            Log.i(TAG, "Download: "+body.length());
             body=body.substring(body.indexOf("<Group Number=\"")+15,body.length());
             Group updatedGroup=null;
             for (String group :

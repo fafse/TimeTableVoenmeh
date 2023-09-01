@@ -77,7 +77,12 @@ public class TimeTableHandler implements Serializable {
         newGroupName = newGroupName.toUpperCase();
         if(groupListNames==null) {
                 update();
+            Log.i(TAG, "setGroupName: updatin group list");
         }
+        Log.i(TAG, String.valueOf("setGroupName: check Group List:"+groupListNames!=null));
+        Log.i(TAG, "setGroupName: "+groupListNames);
+        Log.i(TAG, String.valueOf("setGroupName: "+groupListNames.contains(newGroupName)));
+        Log.i(TAG, String.valueOf("setGroupName: "+newGroupName != ""));
         if (groupListNames!=null&&groupListNames.contains(newGroupName) && newGroupName != "") {
             String oldGroupName=groupName;
             groupName = newGroupName;
