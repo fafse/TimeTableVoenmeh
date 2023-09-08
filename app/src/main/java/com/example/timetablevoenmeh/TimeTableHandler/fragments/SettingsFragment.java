@@ -1,5 +1,6 @@
 package com.example.timetablevoenmeh.TimeTableHandler.fragments;
 
+import android.graphics.Color;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -101,30 +102,29 @@ public class SettingsFragment extends Fragment {
     private void handleGroupChange() {
         try {
             Log.i(TAG, "run: " + timeTableHandler.getGroupName());
+            String textToNotification=null;
             if (timeTableHandler.setGroupName(groupNameTextView.getText().toString().replaceAll("\n", ""))) {
-                getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        Toast.makeText(getActivity(), "Группа изменена на " + timeTableHandler.getGroupName(), Toast.LENGTH_SHORT).show();
-                        groupNameTextView.setText("");
-                    }
-                });
+                textToNotification = "Группа изменена на " + timeTableHandler.getGroupName();
+                ErrorChangeGroupTextView.setTextColor(Color.GREEN);
             } else {
-                getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        ErrorChangeGroupTextView.setVisibility(View.VISIBLE);
-                        ErrorChangeGroupTextView.postDelayed(new Runnable() {
-                            @Override
-                            public void run() {
-                                ErrorChangeGroupTextView.setVisibility(View.GONE);
-
-                            }
-                        }, 3000);
-                    }
-                });
-
+                textToNotification = "Проверьте правильность ввода имени группы или соедниение с интернетом";
+                ErrorChangeGroupTextView.setTextColor(Color.RED);
             }
+            String finalTextToNotification = textToNotification;
+            getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    ErrorChangeGroupTextView.setText(finalTextToNotification);
+                    ErrorChangeGroupTextView.setVisibility(View.VISIBLE);
+                    ErrorChangeGroupTextView.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            ErrorChangeGroupTextView.setVisibility(View.GONE);
+
+                        }
+                    }, 3000);
+                }
+            });
         } catch (IOException e) {
 
             getActivity().runOnUiThread(new Runnable() {

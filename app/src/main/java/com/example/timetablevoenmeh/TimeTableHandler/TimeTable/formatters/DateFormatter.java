@@ -3,16 +3,43 @@ package com.example.timetablevoenmeh.TimeTableHandler.TimeTable.formatters;
 import android.util.Log;
 
 import java.io.Serializable;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 
 public class DateFormatter implements Serializable {
     private Calendar date;
     public boolean isThisWeekEven() {
-        Log.d("DATEFORMATTER", "isThisWeekEven: "+date.get(Calendar.WEEK_OF_MONTH)%2);
-        if (date.get(Calendar.WEEK_OF_YEAR)%2 == 1)
-            return true;
-        else
-            return false;
+        int month = date.get(Calendar.MONTH) + 1;
+        int year = month > 0 && month < 9 ? date.get(Calendar.YEAR) - 1 : date.get(Calendar.YEAR);
+        Date startDate = null;
+        try {
+            startDate = new SimpleDateFormat("dd.MM.yyyy").parse("01.09." + year);
+        } catch (ParseException e) {
+            throw new RuntimeException(e);
+        }
+
+        int numberStartWeek = Integer.parseInt(new SimpleDateFormat("w").format(startDate));
+        int numberNowWeek = date.get(Calendar.WEEK_OF_YEAR);
+
+        int countWeeks = 0;
+        if (month > 0 && month < 9) {
+            Date lastDateYear = null;
+            try {
+                lastDateYear = new SimpleDateFormat("dd.MM.yyyy").parse("31.12." + year);
+            } catch (ParseException e) {
+                throw new RuntimeException(e);
+            }
+            if (!(new SimpleDateFormat("E").format(lastDateYear).equals("Пн"))) {
+                numberNowWeek--;
+            }
+            countWeeks = Integer.parseInt(new SimpleDateFormat("w").format(lastDateYear)) -
+                    numberStartWeek + numberNowWeek;
+        } else {
+            countWeeks = numberNowWeek - numberStartWeek;
+        }
+        return countWeeks % 2 != 0;
     }
 
     public void update() {

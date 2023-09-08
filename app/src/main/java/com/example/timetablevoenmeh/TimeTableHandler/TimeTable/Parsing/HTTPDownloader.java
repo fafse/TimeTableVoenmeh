@@ -94,7 +94,6 @@ public class HTTPDownloader implements Serializable {
                 xmlResult.append(line + "\n");
             }
             Log.i(TAG, "Download: GOT BODY");
-            Log.i(TAG, "Download: "+xmlResult);
             String body = xmlResult.toString();
             body=body.substring(body.indexOf("<Group Number=\"")+15,body.length());
             Group updatedGroup=null;
