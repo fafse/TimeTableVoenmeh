@@ -35,6 +35,7 @@ public class FileWorker  implements Serializable {
     }
 
     public boolean isExists() {
+        Log.i("isExists", "isExists: "+path+path.exists());
         return path.exists();
     }
 

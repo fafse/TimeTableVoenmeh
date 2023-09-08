@@ -12,13 +12,16 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.timetablevoenmeh.R;
 import com.example.timetablevoenmeh.TimeTableHandler.TimeTable.formatters.DateFormatter;
 import com.example.timetablevoenmeh.TimeTableHandler.TimeTable.Parsing.TimeTableHandler;
+import com.example.timetablevoenmeh.TimeTableHandler.TimeTable.formatters.FileWorker;
 
 import java.io.IOException;
 
@@ -32,6 +35,8 @@ public class SettingsFragment extends Fragment {
     private TextView ErrorChangeGroupTextView;
 
     private Button groupNameAcceptButton;
+    private Switch isAlternativeSwitch;
+    private FileWorker settingsFileWorker;
 
     public SettingsFragment() {
         // Required empty public constructor
@@ -43,11 +48,27 @@ public class SettingsFragment extends Fragment {
         groupNameAcceptButton = getView().findViewById(R.id.groupNameInputButton);
         groupNameTextView = (EditText) getView().findViewById(R.id.groupNameInput);
         ErrorChangeGroupTextView = getView().findViewById(R.id.ErrorChangeGroupTextView);
+        isAlternativeSwitch=getView().findViewById(R.id.isAlternativeSwitch);
+        settingsFileWorker = new FileWorker("settings.txt");
+        if(settingsFileWorker.isExists()&&settingsFileWorker.openText()!=null) {
+            String[] params = settingsFileWorker.openText().split("\n");
+            if(params[0]!=null&&params[0].contains("MODE:TRUE"))
+            {
+                isAlternativeSwitch.setChecked(true);
+            }
+        }
+
     }
 
     @Override
     public void onStart() {
         super.onStart();
+        isAlternativeSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                settingsFileWorker.saveText("MODE:"+isChecked+"\n");
+            }
+        });
         groupNameTextView.setOnKeyListener(new View.OnKeyListener() {
             public boolean onKey(View v, int keyCode, KeyEvent event) {
                 // If the event is a key-down event on the "enter" button
