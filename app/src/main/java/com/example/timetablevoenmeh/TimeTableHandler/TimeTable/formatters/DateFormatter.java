@@ -8,7 +8,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
-public class DateFormatter implements Serializable {
+public class DateFormatter implements Serializable, Comparable<DateFormatter> {
     private Calendar date;
     public boolean isThisWeekEven() {
         int month = date.get(Calendar.MONTH) + 1;
@@ -41,6 +41,7 @@ public class DateFormatter implements Serializable {
         }
         return countWeeks % 2 != 0;
     }
+
 
     public void update() {
         date=Calendar.getInstance();
@@ -149,6 +150,10 @@ public class DateFormatter implements Serializable {
         return result;
     }
 
+    public void addDays(int num)
+    {
+        date.add(Calendar.DAY_OF_MONTH,num);
+    }
     public Object clone()
     {
         Calendar newCalendar= (Calendar) date.clone();
@@ -156,19 +161,26 @@ public class DateFormatter implements Serializable {
         dateFormatter.setCalendar(newCalendar);
         return dateFormatter;
     }
-
-    public void setCalendar(Calendar calendar)
-    {
-        date=calendar;
-    }
-
     public int getNumOfDay()
     {
         return date.get(Calendar.DAY_OF_MONTH);
     }
+    private void setCalendar(Calendar calendar)
+    {
+        date=calendar;
+    }
 
-    public void addDays(int numOfDays) {
-        date.add(Calendar.DATE,numOfDays);
+    @Override
+    public int compareTo(DateFormatter o) {
+        if (date.after(o.date))
+        {
+            return 1;
+        }
+        else if(date.before(o.date))
+        {
+            return 0;
+        }
+        return -1;
     }
 
 }

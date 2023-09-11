@@ -23,7 +23,7 @@ import com.example.timetablevoenmeh.databinding.ActivityMainBinding;
 
 import java.util.Objects;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements DayDataListener{
 
     private ActivityMainBinding binding;
 
@@ -35,6 +35,7 @@ public class MainActivity extends AppCompatActivity {
     private SettingsFragment settingsFragment = new SettingsFragment();
     private HomeWorkFragment homeWorkFragment = new HomeWorkFragment();
     private String currentFragment;
+
 
     @SuppressLint("NonConstantResourceId")
     @Override
@@ -152,4 +153,38 @@ public class MainActivity extends AppCompatActivity {
         super.onSaveInstanceState(outState);
     }
 
+    @Override
+    public void onToggleDay(DateFormatter newDateFormatter) {
+        changeDay(newDateFormatter);
+    }
+    private void changeDay(DateFormatter newDateFormatter) {
+        DateFormatter tmp = (DateFormatter) dateFormatter.clone();
+        dateFormatter = newDateFormatter;
+        do {
+        } while (timeTableHandler == null);
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("TIMETABLEHANDLER", timeTableHandler);
+        bundle.putSerializable("DATAFORMATTER", dateFormatter);
+        Log.i("MainActivity", "changeDay: I SAVE DATAFORMATTER"+dateFormatter.getCurrentDate());
+        HomeFragment nextFragment = new HomeFragment();
+        nextFragment.setArguments(bundle);
+        int result = tmp.compareTo(newDateFormatter);
+        if (result==0) {
+            getSupportFragmentManager().beginTransaction()
+                    .setCustomAnimations(R.anim.home_fragment_right_to_left,
+                            R.anim.home_fragment_exit_right_to_left,
+                            R.anim.home_fragment_left_to_right,
+                            R.anim.home_fragment_exit_left_to_right
+                    )
+                    .replace(R.id.fragmentContainerView, nextFragment).commit();
+        } else if (result==1) {
+            getSupportFragmentManager().beginTransaction()
+                    .setCustomAnimations(R.anim.home_fragment_left_to_right,
+                            R.anim.home_fragment_exit_left_to_right,
+                            R.anim.home_fragment_right_to_left,
+                            R.anim.home_fragment_exit_right_to_left
+                    )
+                    .replace(R.id.fragmentContainerView, nextFragment).commit();
+        }
+    }
 }

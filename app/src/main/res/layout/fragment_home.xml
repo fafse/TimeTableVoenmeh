@@ -19,62 +19,12 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <LinearLayout
-            android:id="@+id/calendarLayout"
+        <FrameLayout
+            android:id="@+id/DateContainer"
             android:layout_width="match_parent"
-            android:layout_height="64dp"
-            android:layout_marginTop="1dp"
-            android:orientation="horizontal">
+            android:layout_height="match_parent">
 
-            <androidx.fragment.app.FragmentContainerView
-                android:id="@+id/fragmentContainerView2"
-                android:name="com.example.timetablevoenmeh.TimeTableHandler.fragments.DateContainerFragment"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1" />
-
-            <androidx.fragment.app.FragmentContainerView
-                android:id="@+id/fragmentContainerView3"
-                android:name="com.example.timetablevoenmeh.TimeTableHandler.fragments.DateContainerFragment"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1" />
-
-            <androidx.fragment.app.FragmentContainerView
-                android:id="@+id/fragmentContainerView4"
-                android:name="com.example.timetablevoenmeh.TimeTableHandler.fragments.DateContainerFragment"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1" />
-
-            <androidx.fragment.app.FragmentContainerView
-                android:id="@+id/fragmentContainerView5"
-                android:name="com.example.timetablevoenmeh.TimeTableHandler.fragments.DateContainerFragment"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1" />
-
-            <androidx.fragment.app.FragmentContainerView
-                android:id="@+id/fragmentContainerView6"
-                android:name="com.example.timetablevoenmeh.TimeTableHandler.fragments.DateContainerFragment"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1" />
-
-            <androidx.fragment.app.FragmentContainerView
-                android:id="@+id/fragmentContainerView7"
-                android:name="com.example.timetablevoenmeh.TimeTableHandler.fragments.DateContainerFragment"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1" />
-
-            <androidx.fragment.app.FragmentContainerView
-                android:id="@+id/fragmentContainerView8"
-                android:name="com.example.timetablevoenmeh.TimeTableHandler.fragments.DateContainerFragment"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1" />
-        </LinearLayout>
+        </FrameLayout>
     </LinearLayout>
 
     <ListView

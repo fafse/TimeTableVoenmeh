@@ -1,6 +1,8 @@
 package com.example.timetablevoenmeh.TimeTableHandler.fragments;
 
+import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,13 +10,15 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import com.example.timetablevoenmeh.R;
+import com.example.timetablevoenmeh.TimeTableHandler.DayDataListener;
 import com.example.timetablevoenmeh.TimeTableHandler.TimeTable.formatters.DateFormatter;
 
 
-public class DateContainerFragment extends Fragment {
+public class DateContainerFragment extends Fragment{
     private TextView dayTextView, numDayTextView;
     private ImageView imageViewCircle;
     private Button getThisDayButton;
@@ -22,6 +26,12 @@ public class DateContainerFragment extends Fragment {
     private DateFormatter myDateFormatter;
     private String TAG="DateContainerFragment";
     private String dayText,numDay;
+    private View view;
+    private DayDataListener mListener;
+
+    private int getNumDay() {
+        return Integer.parseInt(numDay);
+    }
 
     public DateContainerFragment() {
         // Required empty public constructor
@@ -53,6 +63,13 @@ public class DateContainerFragment extends Fragment {
                 }
             });
         }
+        getThisDayButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.i(TAG, "onClick: i am day number "+ getNumDay());
+                mListener.onToggleDay(myDateFormatter);
+            }
+        });
         dayTextView.setText(dayText);
         numDayTextView.setText(numDay);
     }
@@ -69,6 +86,19 @@ public class DateContainerFragment extends Fragment {
             imageViewCircle = view.findViewById(R.id.imageViewCircle);
             getThisDayButton = view.findViewById(R.id.getThisDayButton);
         }
+        this.view=view;
         return view;
+    }
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        if(context instanceof DayDataListener)
+        {
+            mListener = (DayDataListener) context;
+        }else
+        {
+            throw new RuntimeException(context.toString()+ " must implement DayDataListener");
+        }
     }
 }

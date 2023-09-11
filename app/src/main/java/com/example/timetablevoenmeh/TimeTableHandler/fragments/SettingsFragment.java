@@ -1,5 +1,8 @@
 package com.example.timetablevoenmeh.TimeTableHandler.fragments;
 
+
+
+import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
 
@@ -12,6 +15,7 @@ import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
@@ -120,7 +124,7 @@ public class SettingsFragment extends Fragment {
                         @Override
                         public void run() {
                             ErrorChangeGroupTextView.setVisibility(View.GONE);
-
+                            groupNameTextView.setText("");
                         }
                     }, 3000);
                 }
@@ -137,6 +141,7 @@ public class SettingsFragment extends Fragment {
             });
         }
     }
+
 
 
     @Override

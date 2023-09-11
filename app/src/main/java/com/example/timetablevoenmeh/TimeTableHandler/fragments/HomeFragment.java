@@ -9,23 +9,27 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentContainerView;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.example.timetablevoenmeh.R;
+import com.example.timetablevoenmeh.TimeTableHandler.DayDataListener;
 import com.example.timetablevoenmeh.TimeTableHandler.TimeTable.Parsing.Lesson;
 import com.example.timetablevoenmeh.TimeTableHandler.TimeTable.Parsing.TimeTableHandler;
 import com.example.timetablevoenmeh.TimeTableHandler.TimeTable.customListVIew.CustomAdapter;
 import com.example.timetablevoenmeh.TimeTableHandler.TimeTable.formatters.DateFormatter;
 
 import java.util.ArrayList;
+import java.util.Date;
 
-public class HomeFragment extends Fragment {
+public class HomeFragment extends Fragment{
 
     // TODO: Rename and change types of parameters
     private String TAG = "HOMEFRAGMENTER";
@@ -40,9 +44,9 @@ public class HomeFragment extends Fragment {
     private View view;
     private Context context;
     private Activity activity;
-    private ArrayList<Fragment> dates;
-    private ArrayList<Bundle> bundles;
-    private int numOfDays=7;
+    private final int numOfDays=7;
+    private DayDataListener mListener;
+    private Fragment datesContainer;
 
     public HomeFragment() {
         // Required empty public constructor
@@ -53,55 +57,29 @@ public class HomeFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Bundle bundle = this.getArguments();
-        dates=new ArrayList<>();
-        bundles=new ArrayList<>();
+
         if (bundle != null) {
                 timeTableHandler = (TimeTableHandler) bundle.getSerializable("TIMETABLEHANDLER");
                 dateFormatter = (DateFormatter) bundle.getSerializable("DATAFORMATTER");
+            fillDatesContainer();
             Log.i(TAG, "onCreate: DATAFORMATTER "+dateFormatter.getCurrentDate());
-            DateFormatter tmpDateFormatter=(DateFormatter) dateFormatter.clone();
-            String currentDay= tmpDateFormatter.getDayOfWeek();
-            switch (currentDay) {
-                case "Понедельник":
-                    tmpDateFormatter.addDays(0);
-                    break;
-                case "Вторник":
-                    tmpDateFormatter.addDays(-1);
-                    break;
-                case "Среда":
-                    tmpDateFormatter.addDays(-2);
-                    break;
-                case "Четверг":
-                    tmpDateFormatter.addDays(-3);
-                    break;
-                case "Пятница":
-                    tmpDateFormatter.addDays(-4);
-                    break;
-                case "Суббота":
-                    tmpDateFormatter.addDays(-5);
-                    break;
-                case "Воскресенье":
-                    tmpDateFormatter.addDays(-6);
-                    break;
-            }
-            for(int i = 0;i<numOfDays;i++)
-            {
-                boolean isActive = tmpDateFormatter.getNumOfDay()==dateFormatter.getNumOfDay();
-                Bundle bundle1=new Bundle();
-                DateFormatter myDataFormatter=tmpDateFormatter;
-                bundle1.putSerializable("myDataFormatter",myDataFormatter);
-                bundle1.putString("dayTextView",tmpDateFormatter.getShortDayOfWeek());
-                bundle1.putString("numDayTextView", String.valueOf(tmpDateFormatter.getNumOfDay()));
-                bundle1.putBoolean("isActive",isActive);
-                bundles.add(bundle1);
-                dates.add(new DateContainerFragment());
-                tmpDateFormatter.addDays(1);
-            }
-            replaceDateFragments(dates,bundles);
             Log.i(TAG, "onCreate: " + dateFormatter.getCurrentDate());
         } else {
             Log.i(TAG, "onCreate: bundle NULL");
         }
+    }
+
+    private void fillDatesContainer()
+    {
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("DATAFORMATTER", dateFormatter);
+        bundle.putInt("NUMOFDAYS", numOfDays);
+        datesContainer = new FragmentDatesContainer();
+        datesContainer.setArguments(bundle);
+        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.DateContainer, datesContainer);
+        fragmentTransaction.commit();
     }
 
     @Override
@@ -110,7 +88,6 @@ public class HomeFragment extends Fragment {
         this.activity = getActivity();
         if (view != null) {
             timeTableList = view.findViewById(R.id.ListTimeTable);
-
             lessonNotFoundTextView = view.findViewById(R.id.lessonNotFoundTextView);
             gestureHandler = new GestureHandler();
             view.setOnTouchListener(gestureHandler);
@@ -141,36 +118,7 @@ public class HomeFragment extends Fragment {
     public void onStart() {
         super.onStart();
         loadTable();
-
         setAdapter(timeTableList, adapter);
-    }
-
-    private void changeDay(int numOfDays) {
-        dateFormatter.addDays(numOfDays);
-        do {
-        } while (timeTableHandler == null);
-        Bundle bundle = new Bundle();
-        bundle.putSerializable("TIMETABLEHANDLER", timeTableHandler);
-        bundle.putSerializable("DATAFORMATTER", dateFormatter);
-        Log.i(TAG, "changeDay: I SAVE DATAFORMATTER"+dateFormatter.getCurrentDate());
-        HomeFragment nextFragment = new HomeFragment();
-        nextFragment.setArguments(bundle);
-        if (numOfDays > 0)
-            getActivity().getSupportFragmentManager().beginTransaction()
-                    .setCustomAnimations(R.anim.home_fragment_right_to_left,
-                            R.anim.home_fragment_exit_right_to_left,
-                            R.anim.home_fragment_left_to_right,
-                            R.anim.home_fragment_exit_left_to_right
-                    )
-                    .replace(R.id.fragmentContainerView, nextFragment).commit();
-        if(numOfDays<0)
-            getActivity().getSupportFragmentManager().beginTransaction()
-                    .setCustomAnimations(R.anim.home_fragment_left_to_right,
-                            R.anim.home_fragment_exit_left_to_right,
-                            R.anim.home_fragment_right_to_left,
-                            R.anim.home_fragment_exit_right_to_left
-                    )
-                    .replace(R.id.fragmentContainerView, nextFragment).commit();
     }
 
 
@@ -201,41 +149,7 @@ public class HomeFragment extends Fragment {
         });
     }
 
-    private void replaceDateFragments(ArrayList<Fragment> fragments, ArrayList<Bundle> bundle)
-    {
-        for(int i = 0;i<numOfDays;i++)
-        {
-            fragments.get(i).setArguments(bundles.get(i));
-        }
-        getActivity().getSupportFragmentManager()
-                .beginTransaction()
-        .replace(R.id.fragmentContainerView2, fragments.get(0))
-        .commit();
-        getActivity().getSupportFragmentManager()
-                .beginTransaction()
-                .replace(R.id.fragmentContainerView3, fragments.get(1))
-                .commit();
-        getActivity().getSupportFragmentManager()
-                .beginTransaction()
-                .replace(R.id.fragmentContainerView4, fragments.get(2))
-                .commit();
-        getActivity().getSupportFragmentManager()
-                .beginTransaction()
-                .replace(R.id.fragmentContainerView5, fragments.get(3))
-                .commit();
-        getActivity().getSupportFragmentManager()
-                .beginTransaction()
-                .replace(R.id.fragmentContainerView6, fragments.get(4))
-                .commit();
-        getActivity().getSupportFragmentManager()
-                .beginTransaction()
-                .replace(R.id.fragmentContainerView7, fragments.get(5))
-                .commit();
-        getActivity().getSupportFragmentManager()
-                .beginTransaction()
-                .replace(R.id.fragmentContainerView8, fragments.get(6))
-                .commit();
-    }
+
 
     public TimeTableHandler getTimeTableHandler() {
         return timeTableHandler;
@@ -243,6 +157,17 @@ public class HomeFragment extends Fragment {
 
     public DateFormatter getDateFormatter() {
         return dateFormatter;
+    }
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        if(context instanceof DayDataListener)
+        {
+            mListener = (DayDataListener) context;
+        }else
+        {
+            throw new RuntimeException(context.toString()+ " must implement DayDataListener");
+        }
     }
 
     private class GestureHandler implements View.OnTouchListener {
@@ -267,14 +192,15 @@ public class HomeFragment extends Fragment {
                             try {
                                 if (Math.abs(xDiff) > Math.abs(yDiff)) {
                                     if (Math.abs(xDiff) > threshold && Math.abs(velocityX) > velocity_threshold) {
+                                        DateFormatter tmpDateFormatter = (DateFormatter) dateFormatter.clone();
                                         if (xDiff > 0) {
+                                            tmpDateFormatter.addDays(-1);
                                             //right swipe
-                                            changeDay(-1);
                                         } else {
                                             //left swipe
-                                            changeDay(1);
-
+                                            tmpDateFormatter.addDays(1);
                                         }
+                                        mListener.onToggleDay(tmpDateFormatter);
                                     }
                                 }
                             } catch (Exception e) {
